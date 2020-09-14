@@ -9,8 +9,8 @@ public class JobSeeker extends User {
     private String picture;
     private double rating;
 
-    public JobSeeker(int id, String first_name, String last_name, Date date_of_birth, String city, String country, String email, String skills, String past_experience, String picture, double rating) {
-        super(id, first_name, last_name, date_of_birth, city, country, email);
+    public JobSeeker(int id, String first_name, String last_name, String email, String username, String date_of_birth, String city, String country, String phone, String skills, String past_experience, String picture, double rating) {
+        super(id, first_name, last_name, email, username, date_of_birth, city, country, phone);
         this.skills = skills;
         this.past_experience = past_experience;
         this.picture = picture;

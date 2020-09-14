@@ -6,12 +6,13 @@ public class User {
     private int id;
     private String first_name;
     private String last_name;
-    private Date date_of_birth;
+    private String date_of_birth;
     private String city;
     private String country;
     private String email;
+    private String username;
     private Role role_id;
-    private String phone_nuumber;
+    private String phone_number;
 
     public String getHashed_password() {
         return hashed_password;
@@ -43,11 +44,11 @@ public class User {
         this.last_name = last_name;
     }
 
-    public Date getDate_of_birth() {
+    public String getDate_of_birth() {
         return date_of_birth;
     }
 
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth(String date_of_birth) {
         this.date_of_birth = date_of_birth;
     }
 
@@ -72,7 +73,7 @@ public class User {
     }
 
 
-    public User(int id, String first_name, String last_name, Date date_of_birth, String city, String country, String email) {
+    public User(int id, String first_name, String last_name, String email, String username, String date_of_birth, String city, String country, String phone) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -80,15 +81,19 @@ public class User {
         this.city = city;
         this.country = country;
         this.email = email;
+        this.username = username;
+        this.phone_number = phone;
     }
 
-    public User(String first_name, String last_name, Date date_of_birth, String city, String country, String email) {
+    public User(String first_name, String last_name, String email, String username, String date_of_birth, String city, String country, String phone) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.date_of_birth = date_of_birth;
         this.city = city;
         this.country = country;
         this.email = email;
+        this.username = username;
+        this.phone_number = phone;
     }
 
 

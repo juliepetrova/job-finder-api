@@ -1,13 +1,13 @@
 package Controller;
 
-//import com.mysql.jdbc.Connection;
-
-import java.sql.Connection;
+import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 
 public class Connect {
+
+    protected Connection conn = null;
+
     public Connect() {
-        Connection conn = null;
 
         try {
 
@@ -25,12 +25,12 @@ public class Connect {
             System.err.println(e.getMessage());
             e.printStackTrace();
         } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                    System.out.println("Database Connection Terminated");
-                } catch (Exception e) {}
-            }
+//            if (conn != null) {
+//                try {
+//                    conn.close();
+//                    System.out.println("Database Connection Terminated");
+//                } catch (Exception e) {}
+//            }
         }
     }
 }

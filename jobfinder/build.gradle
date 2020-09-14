@@ -34,4 +34,6 @@ dependencies {
     // Logging
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.+'
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.+'
+
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
 }

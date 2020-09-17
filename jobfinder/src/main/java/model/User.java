@@ -72,6 +72,7 @@ public class User {
         return email;
     }
 
+    public User(){}
 
     public User(int id, String first_name, String last_name, String email, String username, String date_of_birth, String city, String country, String phone) {
         this.id = id;

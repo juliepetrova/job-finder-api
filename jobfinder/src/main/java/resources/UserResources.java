@@ -3,11 +3,9 @@ package resources;
 import Controller.UserController;
 import model.User;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.sql.SQLException;
 import java.util.List;
 
 @Path("/users")
@@ -15,6 +13,7 @@ public class UserResources {
 
     @Context
     private UriInfo uriInfo;
+    private UserController controller = new UserController();
 
 
     @GET
@@ -30,12 +29,36 @@ public class UserResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
         List<User> users;
-        UserController controller = new UserController();
-
-
-            users = controller.getAllUseres();
+                    users = controller.getAllUseres();
 
         GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {  };
         return Response.ok(entity).build();
     }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@PathParam("id") int stNr) throws SQLException {
+
+        User user = controller.getUserById(stNr);
+        if (user == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user id.").build();
+        } else {
+            return Response.ok(user).build();
+        }
+    }
+
+    @GET
+    @Path("/email/{email}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getUserId(@PathParam("email") String email) throws SQLException {
+
+        int id = controller.getUserIdByEmail(email);
+        if (id <= -1) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Please provide a valid user email.").build();
+        } else {
+            return Response.ok(id).build();
+        }
+    }
+
 }

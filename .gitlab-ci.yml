@@ -6,6 +6,7 @@ stages:
 
 before_script:
   - set GRADLE_USER_HOME=$(pwd)/.gradle
+  - cd jobfinder
 
 build:
   stage: build

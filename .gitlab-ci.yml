@@ -9,7 +9,7 @@ before_script:
 
 build:
   stage: build
-  script: ./gradlew assemble
+  script: .\gradlew assemble
 
 test:
   stage: test

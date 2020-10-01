@@ -8,9 +8,7 @@ image: maven:latest
 #   paths:
 #     - .m2/repository/
 #     - target/
-stages: 
-  -build
-  -test
+
 
 build:
   stage: build

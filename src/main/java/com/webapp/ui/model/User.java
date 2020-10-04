@@ -1,11 +1,19 @@
 package com.webapp.ui.model;
 
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import  javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class User implements com.webapp.ui.model.base.Entity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 //    private int role;
     private String first_name;
@@ -18,9 +26,11 @@ public class User implements com.webapp.ui.model.base.Entity {
     private String country;
     private String phone_number;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Job> jobs;
+
+
     public int getId() {
         return id;
     }
@@ -99,5 +109,13 @@ public class User implements com.webapp.ui.model.base.Entity {
 
     public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
+    }
+
+    public Set<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Set<Job> jobs) {
+        this.jobs = jobs;
     }
 }

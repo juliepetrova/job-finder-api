@@ -1,5 +1,6 @@
 package com.webapp.ui.controller;
 
+import com.webapp.ui.model.Job;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -49,13 +51,7 @@ public class UserController {
 //            return Jwts.builder().setSubject(username).clain("roles", "user").setIssuedAt(new Date())
 //                    .signWith(SignatureAlgorithm.HS256, "secret").compact();
     }
-//    @Autowired
-//    private UserRepository userRepository;
 
-//    @GetMapping
-//    public String getUsers(){
-//        return "get users was called";
-//    }
 
     @GetMapping
     public List<User> getUsersPagination(@RequestParam(value="page", defaultValue = "1") int page,
@@ -67,26 +63,25 @@ public class UserController {
     }
 
     @GetMapping(path="/{userId}", produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public User getUser(@PathVariable String userId){
+    public User getUser(@PathVariable int userId){
 
-        User returnValue = new User();
-        returnValue.setFirst_name("Mark");
-        returnValue.setEmail("test@email.com");
-        return returnValue;
+        return userService.findUserById(userId);
     }
 
-    @PostMapping
-    public String createUser(){
-        return "create user was called";
+    @GetMapping (path = "/{user_id}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Set<Job> getJobsByUser(@PathVariable int user_id){
+       User user = userService.findUserById(user_id);
+       return user.getJobs();
     }
+
 
     @PutMapping
     public String updateUser(){
         return "update user was called";
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "delete user was called";
+    @DeleteMapping(path = "/{user_id}")
+    public void deleteUser(@PathVariable int user_id) {
+        userService.deleteUser(user_id);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface JobService {
-    List<Job> getAllAvailableJobs();
+    List<Job> findAllAvailableJobs();
     Job getJobById(int id);
     List<Job> getJobsByUserId(int user_id);
     List<Job> getJobsByCity(String city);

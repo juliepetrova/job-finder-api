@@ -16,11 +16,12 @@ public class Job implements com.webapp.ui.model.base.Entity {
     private int status_id;
     private String title;
     private String description;
-    private Date date;
+    private String date;
     private int hours;
     private double payment;
     private String city;
     private String address;
+
 
     @ManyToOne
     @JsonBackReference
@@ -70,11 +71,11 @@ public class Job implements com.webapp.ui.model.base.Entity {
     }
 
     @Column(name = "date", nullable = false)
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -18,7 +18,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public List<Job> getAllAvailableJobs() {
+    public List<Job> findAllAvailableJobs() {
         // Where status is available
         return jobRepository.findAll();
     }

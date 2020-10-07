@@ -13,4 +13,5 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     List<Job> findByUser(int id);
     List<Job> findByCity(String city);
     List<Job> findAll();
+    void deleteById(int id);
 }

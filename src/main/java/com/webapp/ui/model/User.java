@@ -26,7 +26,7 @@ public class User implements com.webapp.ui.model.base.Entity {
     private String country;
     private String phone_number;
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Job> jobs;
 

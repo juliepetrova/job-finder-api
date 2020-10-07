@@ -17,7 +17,7 @@ public class Job implements com.webapp.ui.model.base.Entity {
     private String title;
     private String description;
     private String date;
-    private int hours;
+//    private int hours;
     private double payment;
     private String city;
     private String address;
@@ -77,15 +77,6 @@ public class Job implements com.webapp.ui.model.base.Entity {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    @Column(name = "hours", nullable = false, length = 2)
-    public int getHours() {
-        return hours;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
     }
 
     @Column(name = "payment", nullable = false)

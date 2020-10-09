@@ -50,7 +50,7 @@ public class JobController {
 
 
     @DeleteMapping(path = "/{job_id}")
-    public void deleteUser(@PathVariable int job_id) {
+    public void deleteJob(@PathVariable int job_id) {
         jobService.deleteJob(job_id);
     }
 

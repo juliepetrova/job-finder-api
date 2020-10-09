@@ -25,10 +25,10 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User registerUser(@RequestBody User user){
-        return userService.save(user);
+        return userService.saveUserDetails(user);
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
         public String login(@RequestBody Map<String, String> json) throws ServletException {
             if(json.get("username") == null || json.get("password") == null){
                 throw new ServletException("Please fill in username and password!");
@@ -59,7 +59,6 @@ public class UserController {
                                    @RequestParam(value="sort", required = false) String sort){
 
         return userService.findAllUsers();
-//        return "get users was called from page " + page + " and limit " + limit;
     }
 
     @GetMapping(path="/{userId}", produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -76,8 +75,8 @@ public class UserController {
 
 
     @PutMapping
-    public String updateUser(){
-        return "update user was called";
+    public User updateUser(@RequestBody User user){
+        return userService.saveUserDetails(user);
     }
 
     @DeleteMapping(path = "/{user_id}")

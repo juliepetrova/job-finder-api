@@ -28,26 +28,23 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findById(id);
     }
 
-
     @Override
     public List<Job> getJobsByUserId(int user_id) {
         return jobRepository.findByUser(user_id);
     }
+
+//    TODO
+    public List<Job> getCurrentJobsByUserId(){return null;}
+    public List<Job> getCompletedJobsBYUser(){return null;}
 
     @Override
     public List<Job> getJobsByCity(String city) {
         return jobRepository.findByCity(city);
     }
 
-
     @Override
     public Job createJob(Job job) {
         return jobRepository.save(job);
-    }
-
-    @Override
-    public Job updateJob(Job job) {
-        return null;
     }
 
     @Override

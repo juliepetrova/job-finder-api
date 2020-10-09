@@ -25,30 +25,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
+    public User findUserByEmail(String email) { return userRepository.findByEmail(email); }
 
     @Override
     public User saveUserDetails(User user) {
-        return null;
-    }
-
-    @Override
-    public User updateUserDetails(User user) {
-        return null;
-    }
-
-    @Override
-    public void updateRating(int user_id, double rating) {
-
-    }
-
-    @Override
-    public User save(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public void updateRating(int user_id, double rating) { }
 
     @Override
     public User findByUsername(String username) {

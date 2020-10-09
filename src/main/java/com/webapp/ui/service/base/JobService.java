@@ -13,7 +13,6 @@ public interface JobService {
     List<Job> getJobsByUserId(int user_id);
     List<Job> getJobsByCity(String city);
     Job createJob(Job job);
-    Job updateJob(Job job);
     void deleteJob(int id);
 
 

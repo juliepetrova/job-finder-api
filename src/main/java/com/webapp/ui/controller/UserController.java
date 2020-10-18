@@ -1,17 +1,17 @@
 package com.webapp.ui.controller;
 
+import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.User;
+import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users")
@@ -21,6 +21,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    ApplicantService applicantService;
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -73,7 +75,6 @@ public class UserController {
        return user.getJobs();
     }
 
-
     @PutMapping
     public User updateUser(@RequestBody User user){
         return userService.saveUserDetails(user);
@@ -83,4 +84,30 @@ public class UserController {
     public void deleteUser(@PathVariable int user_id) {
         userService.deleteUser(user_id);
     }
+
+
+//    Applicant
+@PostMapping (path = "/applicant")
+public Applicant createApplicant(@RequestBody Applicant applicant) {
+
+        return applicantService.createApplicant(applicant);
+
+    }
+
+    @GetMapping (path = "/applicant/{user_id}")
+        public Applicant getApplicant (@PathVariable int user_id){
+            return applicantService.findApplicantById(user_id);
+        }
+
+//    @GetMapping (path = "/{user_id}/applicationsJobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public Map<JobApplication,Job> getApplications (@PathVariable int user_id){
+//        Applicant applicant = applicantService.findApplicantById(user_id);
+//        Set<JobApplication> applications = applicant.getJobApplications();
+//        Map<JobApplication, Job> map = new HashMap<JobApplication, Job>();
+//        for (JobApplication appl:
+//                applications) {
+//            map.put(appl, appl.getJob());
+//        }
+//        return map;
+//    }
 }

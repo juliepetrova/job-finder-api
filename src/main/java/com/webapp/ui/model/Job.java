@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "job")
@@ -26,6 +27,9 @@ public class Job implements com.webapp.ui.model.base.Entity {
     @ManyToOne
     @JsonBackReference
     private User user;
+
+//    @OneToMany(mappedBy="job")
+//    private Set<JobApplication> jobApplications;
 
     public int getId() {
         return id;

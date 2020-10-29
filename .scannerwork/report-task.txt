@@ -2,5 +2,5 @@ projectKey=boulot-jobfinder
 serverUrl=http://localhost:9000
 serverVersion=8.5.0.37579
 dashboardUrl=http://localhost:9000/dashboard?id=boulot-jobfinder
-ceTaskId=AXUr1eHFtx9dQpizj4ha
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXUr1eHFtx9dQpizj4ha
+ceTaskId=AXV1EtI-MbdEFoti4GiJ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXV1EtI-MbdEFoti4GiJ

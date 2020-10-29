@@ -32,9 +32,9 @@ public class JobApplicationController {
         return jobApplicationService.getJobApplicationById(application_id);
     }
 
-
+//    Get applications by applicant
     @GetMapping (path = "/applicant/{user_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Set<JobApplication> getApplications (@PathVariable int user_id){
+    public Set<JobApplication> getJobApplications (@PathVariable int user_id){
         return jobApplicationService.getJobApplicationsByApplicant(user_id);
     }
 }

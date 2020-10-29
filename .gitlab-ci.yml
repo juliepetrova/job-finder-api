@@ -41,7 +41,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
+    - mvn verify sonar:sonar -Dsonar.qualitygate.wait=true -Dsonar.login=$SONAR_LOGIN
   allow_failure: true
   only:
     - master

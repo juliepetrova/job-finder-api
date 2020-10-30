@@ -41,7 +41,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn  -Dsonar.login=admin -Dsonar.password=admin verify sonar:sonar
+    - mvn  "-Dsonar.login=admin" "-Dsonar.password=admin" verify sonar:sonar
   allow_failure: true
   only:
     - master

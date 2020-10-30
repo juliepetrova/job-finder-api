@@ -30,7 +30,7 @@ test:
 sonarqube-check:
   image: maven:3.6.3-jdk-11
   variables:
-    SONAR_TOKEN: "g_A3KdgssJoQN5HJ7HpR"
+   # SONAR_TOKEN: "g_A3KdgssJoQN5HJ7HpR"
     SONAR_HOST_URL: "http://localhost:9000"
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  
     # Defines the location of the analysis task cache

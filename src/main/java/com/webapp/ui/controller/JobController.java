@@ -28,12 +28,12 @@ public class JobController {
     @GetMapping(path="/{jobId}", produces ={MediaType.APPLICATION_JSON_VALUE})
     public Job getJob(@PathVariable int jobId){
 
-        return jobService.getJobById(jobId);
+        return jobService.findJobById(jobId);
     }
 
     @GetMapping(path = "/{job_id}/user", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User getUserByJob(@PathVariable int job_id){
-        Job job = jobService.getJobById(job_id);
+        Job job = jobService.findJobById(job_id);
         return job.getUser();
     }
 

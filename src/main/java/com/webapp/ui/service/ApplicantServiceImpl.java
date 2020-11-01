@@ -20,6 +20,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public Applicant createApplicant(Applicant applicant) {
+        if(applicant == null || applicant.getId() == 0){
+            throw new NullPointerException();
+        }
         return applicantRepository.save(applicant);
     }
 }

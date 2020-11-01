@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface JobService {
     List<Job> findAllAvailableJobs();
-    Job getJobById(int id);
-    List<Job> getJobsByUserId(int user_id);
-    List<Job> getJobsByCity(String city);
+    Job findJobById(int id);
+    List<Job> findJobsByUserId(int user_id);
+    List<Job> findJobsByCity(String city);
     Job createJob(Job job);
     void deleteJob(int id);
 

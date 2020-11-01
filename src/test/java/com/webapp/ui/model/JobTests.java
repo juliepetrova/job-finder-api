@@ -1,6 +1,5 @@
-package com.webapp.model;
+package com.webapp.ui.model;
 
-import com.webapp.ui.model.Job;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;

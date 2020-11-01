@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,19 +24,19 @@ public class JobApplicationController {
 //    Create applications
     @PostMapping
     public JobApplication createJobApplication(@RequestBody JobApplication jobApplication) {
-        return jobApplicationService.createJobApplication(jobApplication);
+        return jobApplicationService.saveJobApplication(jobApplication);
     }
 
 //    Get application by ID
     @GetMapping (path = "/{application_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public JobApplication getJobApplicationById(@PathVariable int application_id){
-        return jobApplicationService.getJobApplicationById(application_id);
+        return jobApplicationService.findJobApplicationById(application_id);
     }
 
 //    Get applications by applicant
     @GetMapping (path = "/applicant/{user_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Set<JobApplication> getJobApplications (@PathVariable int user_id){
-        return jobApplicationService.getJobApplicationsByApplicant(user_id);
+    public List<JobApplication> getJobApplications (@PathVariable int user_id){
+        return jobApplicationService.findJobApplicationsByApplicant(user_id);
     }
 }
 

@@ -3,7 +3,7 @@ package com.webapp.ui.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "applicant")
@@ -21,17 +21,17 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
 //    @MapsId
 //    private User user;
 
-    public Set<JobApplication> getJobApplications() {
+    public List<JobApplication> getJobApplications() {
         return jobApplications;
     }
 
-    public void setJobApplications(Set<JobApplication> jobApplications) {
+    public void setJobApplications(List<JobApplication> jobApplications) {
         this.jobApplications = jobApplications;
     }
 
     @OneToMany(mappedBy="applicant", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private Set<JobApplication> jobApplications;
+    private List<JobApplication> jobApplications;
 
     @Override
     public int getId() {

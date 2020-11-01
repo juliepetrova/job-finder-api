@@ -28,8 +28,15 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) { return userRepository.findByEmail(email); }
 
     @Override
-    public User saveUserDetails(User user) {
-        return userRepository.save(user);
+    public User saveUserDetails(User user) throws Exception {
+        if(user == null || user.getEmail() == null){
+            throw new NullPointerException();
+        }
+        else if(userRepository.findByEmail(user.getEmail()) == null) {
+            return userRepository.save(user);
+        }else{
+            throw new Exception("User with that email already exists");
+        }
     }
 
     @Override

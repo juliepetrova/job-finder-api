@@ -2,12 +2,12 @@ package com.webapp.ui.service.base;
 
 import com.webapp.ui.model.JobApplication;
 
-import java.util.Set;
+import java.util.List;
 
 public interface JobApplicationService {
-    JobApplication createJobApplication(JobApplication jobApplication);
+    JobApplication saveJobApplication(JobApplication jobApplication);
 
-    JobApplication getJobApplicationById(int jobApplication_id);
+    JobApplication findJobApplicationById(int jobApplication_id);
 
-    Set<JobApplication> getJobApplicationsByApplicant(int user_id);
+    List<JobApplication> findJobApplicationsByApplicant(int user_id);
 }

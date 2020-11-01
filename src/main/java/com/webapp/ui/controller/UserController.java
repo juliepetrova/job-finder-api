@@ -26,7 +26,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User registerUser(@RequestBody User user){
+    public User registerUser(@RequestBody User user) throws Exception {
         return userService.saveUserDetails(user);
     }
 
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user){
+    public User updateUser(@RequestBody User user) throws Exception {
         return userService.saveUserDetails(user);
     }
 

@@ -2,12 +2,9 @@ package com.webapp.ui.service;
 
 import com.webapp.ui.model.Job;
 import com.webapp.ui.repository.JobRepository;
-import com.webapp.ui.repository.UserRepository;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,26 +21,29 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Job getJobById(int id) {
+    public Job findJobById(int id) {
         return jobRepository.findById(id);
     }
 
     @Override
-    public List<Job> getJobsByUserId(int user_id) {
+    public List<Job> findJobsByUserId(int user_id) {
         return jobRepository.findByUser(user_id);
     }
 
 //    TODO
-    public List<Job> getCurrentJobsByUserId(){return null;}
-    public List<Job> getCompletedJobsBYUser(){return null;}
+    public List<Job> findCurrentJobsByUserId(){return null;}
+    public List<Job> findCompletedJobsBYUser(){return null;}
 
     @Override
-    public List<Job> getJobsByCity(String city) {
+    public List<Job> findJobsByCity(String city) {
         return jobRepository.findByCity(city);
     }
 
     @Override
     public Job createJob(Job job) {
+        if(job == null || job.getTitle() == null){
+            throw new NullPointerException();
+        }
         return jobRepository.save(job);
     }
 

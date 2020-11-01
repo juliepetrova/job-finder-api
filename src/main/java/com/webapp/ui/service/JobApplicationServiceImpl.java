@@ -6,6 +6,7 @@ import com.webapp.ui.service.base.JobApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -15,17 +16,20 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     JobApplicationRepository jobApplicationRepository;
 
     @Override
-    public JobApplication createJobApplication(JobApplication jobApplication) {
+    public JobApplication saveJobApplication(JobApplication jobApplication) {
+        if(jobApplication == null || jobApplication.getJob() == null){
+            throw new NullPointerException();
+        }
         return jobApplicationRepository.save(jobApplication);
     }
 
     @Override
-    public JobApplication getJobApplicationById(int jobApplication_id) {
+    public JobApplication findJobApplicationById(int jobApplication_id) {
         return jobApplicationRepository.findById(jobApplication_id);
     }
 
     @Override
-    public Set<JobApplication> getJobApplicationsByApplicant(int user_id) {
+    public List<JobApplication> findJobApplicationsByApplicant(int user_id) {
         return jobApplicationRepository.findByApplicantId(user_id);
     }
 }

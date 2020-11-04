@@ -16,6 +16,10 @@
 
 	<properties>
 		<java.version>14</java.version>
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+<!--		<sonar.coverage.jacoco.xmlReportPaths>../app-it/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>-->
+
 	</properties>
 
 	<dependencies>
@@ -64,6 +68,13 @@
 			
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -78,6 +89,8 @@
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.7.0.1746</version>
 			</plugin>
+
+
 		</plugins>
 	</build>
 

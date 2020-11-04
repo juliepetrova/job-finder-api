@@ -6,6 +6,7 @@ import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -31,19 +32,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-        public String login(@RequestBody Map<String, String> json) throws ServletException {
-            if(json.get("username") == null || json.get("password") == null){
-                throw new ServletException("Please fill in username and password!");
-            }
-            String username = json.get("username");
-            String password = json.get("password");
+    public String login(@RequestBody Map<String, String> json) throws ServletException {
+        if (json.get("username") == null || json.get("password") == null) {
+            throw new ServletException("Please fill in username and password!");
+        }
+        String username = json.get("username");
+        String password = json.get("password");
 
-            User user = userService.findByUsername(username);
+        User user = userService.findByUsername(username);
 
-            if(user == null){
-                throw new ServletException("Username not found!");
-            }
-            return "Not implemented";
+        if (user == null) {
+            throw new ServletException("Username not found!");
+        }
+        return "Not implemented";
 
 //            String pwd = user.getPassword();
 //            if(!password.equals(pwd)){
@@ -56,28 +57,40 @@ public class UserController {
 
 
     @GetMapping
-    public List<User> getUsersPagination(@RequestParam(value="page", defaultValue = "1") int page,
-                                   @RequestParam(value="limit", defaultValue = "50") int limit,
-                                   @RequestParam(value="sort", required = false) String sort){
-
+    public List<User> getUsers() {
+//            @RequestParam(value="page", defaultValue = "1") int page,
+//            @RequestParam(value="limit", defaultValue = "50") int limit,
         return userService.findAllUsers();
     }
 
-    @GetMapping(path="/{userId}", produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public User getUser(@PathVariable int userId){
-
-        return userService.findUserById(userId);
+    @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public User getUser(@PathVariable int userId) throws NotFoundException {
+        User user = userService.findUserById(userId);
+        if (user != null) {
+            return user;
+        } else {
+            throw new NotFoundException("User with the provided id not found");
+        }
     }
 
-    @GetMapping (path = "/{user_id}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Set<Job> getJobsByUser(@PathVariable int user_id){
-       User user = userService.findUserById(user_id);
-       return user.getJobs();
+    @GetMapping(path = "/{user_id}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Job> getJobsByUser(@PathVariable int user_id) {
+        User user = userService.findUserById(user_id);
+        if(user.getJobs() != null) {
+            return user.getJobs();
+        }else {
+            throw new NullPointerException("This user has not posted any jobs.");
+        }
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) throws Exception {
-        return userService.saveUserDetails(user);
+        User found = userService.saveUserDetails(user);
+        if(found != null) {
+            return found;
+        }else{
+            throw new NotFoundException("User with this id was not found!");
+        }
     }
 
     @DeleteMapping(path = "/{user_id}")
@@ -86,28 +99,27 @@ public class UserController {
     }
 
 
-//    Applicant
-@PostMapping (path = "/applicant")
-public Applicant createApplicant(@RequestBody Applicant applicant) {
-
-        return applicantService.createApplicant(applicant);
+    //    Applicant
+    @PostMapping(path = "/applicant")
+    public Applicant createApplicant(@RequestBody Applicant applicant) throws Exception {
+        if(applicant.getId() < 1){
+            throw new InputMismatchException("User with the specified id does not exist");
+        }else if (userService.findUserById(applicant.getId()) != null) {
+            return applicantService.createApplicant(applicant);
+        }else {
+            throw new Exception("There is no user corresponding to this applicant id.");
+        }
 
     }
 
-    @GetMapping (path = "/applicant/{user_id}")
-        public Applicant getApplicant (@PathVariable int user_id){
+    @GetMapping(path = "/applicant/{user_id}")
+    public Applicant getApplicant(@PathVariable int user_id) throws NotFoundException {
+        if(applicantService.findApplicantById(user_id) != null) {
             return applicantService.findApplicantById(user_id);
+        } else {
+            throw new NotFoundException("Applicant not found");
         }
+    }
 
-//    @GetMapping (path = "/{user_id}/applicationsJobs", produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public Map<JobApplication,Job> getApplications (@PathVariable int user_id){
-//        Applicant applicant = applicantService.findApplicantById(user_id);
-//        Set<JobApplication> applications = applicant.getJobApplications();
-//        Map<JobApplication, Job> map = new HashMap<JobApplication, Job>();
-//        for (JobApplication appl:
-//                applications) {
-//            map.put(appl, appl.getJob());
-//        }
-//        return map;
-//    }
+
 }

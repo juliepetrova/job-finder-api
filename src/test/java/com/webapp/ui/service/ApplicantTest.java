@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ApplicantTests {
+public class ApplicantTest {
 
     @Mock
     ApplicantRepository applicantRepository;

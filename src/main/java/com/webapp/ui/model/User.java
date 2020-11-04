@@ -5,6 +5,7 @@ package com.webapp.ui.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import  javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class User implements com.webapp.ui.model.base.Entity {
 
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private Set<Job> jobs;
+    private List<Job> jobs;
 
 
     public int getId() {
@@ -111,11 +112,11 @@ public class User implements com.webapp.ui.model.base.Entity {
         this.phone_number = phone_number;
     }
 
-    public Set<Job> getJobs() {
+    public List<Job> getJobs() {
         return jobs;
     }
 
-    public void setJobs(Set<Job> jobs) {
+    public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
     }
 }

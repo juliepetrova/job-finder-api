@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
         else if(userRepository.findByEmail(user.getEmail()) == null) {
             return userRepository.save(user);
-        }else{
+        }else {
             throw new Exception("User with that email already exists");
         }
     }

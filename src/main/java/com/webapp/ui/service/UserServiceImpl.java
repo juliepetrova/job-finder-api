@@ -4,6 +4,7 @@ import com.webapp.ui.model.User;
 import com.webapp.ui.repository.UserRepository;
 import com.webapp.ui.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,19 +29,21 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) { return userRepository.findByEmail(email); }
 
     @Override
-    public User saveUserDetails(User user) throws Exception {
+    public User saveUserDetails(User user) throws DuplicateKeyException {
         if(user == null || user.getEmail() == null){
             throw new NullPointerException();
         }
         else if(userRepository.findByEmail(user.getEmail()) == null) {
             return userRepository.save(user);
         }else {
-            throw new Exception("User with that email already exists");
+            throw new DuplicateKeyException("User with that email already exists");
         }
     }
 
     @Override
-    public void updateRating(int user_id, double rating) { }
+    public void updateRating(int user_id, double rating) {
+//        Should be moved into Applicant
+    }
 
     @Override
     public User findByUsername(String username) {
@@ -48,8 +51,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(int user_id) {
-        userRepository.deleteById(user_id);
+    public void deleteUser(int userId) {
+        userRepository.deleteById(userId);
     }
 
 

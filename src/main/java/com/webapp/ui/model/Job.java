@@ -3,8 +3,6 @@ package com.webapp.ui.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "job")
@@ -18,7 +16,6 @@ public class Job implements com.webapp.ui.model.base.Entity {
     private String title;
     private String description;
     private String date;
-//    private int hours;
     private double payment;
     private String city;
     private String address;

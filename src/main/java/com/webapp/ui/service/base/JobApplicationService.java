@@ -7,7 +7,7 @@ import java.util.List;
 public interface JobApplicationService {
     JobApplication saveJobApplication(JobApplication jobApplication);
 
-    JobApplication findJobApplicationById(int jobApplication_id);
+    JobApplication findJobApplicationById(int jobApplicationId);
 
-    List<JobApplication> findJobApplicationsByApplicant(int user_id);
+    List<JobApplication> findJobApplicationsByApplicant(int userId);
 }

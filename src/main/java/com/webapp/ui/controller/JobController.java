@@ -4,9 +4,7 @@ import com.webapp.ui.model.Job;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +30,8 @@ public class JobController {
     }
 
     @GetMapping(path = "/{job_id}/user", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public User getUserByJob(@PathVariable int job_id){
-        Job job = jobService.findJobById(job_id);
+    public User getUserByJob(@PathVariable int jobId){
+        Job job = jobService.findJobById(jobId);
         return job.getUser();
     }
 
@@ -50,8 +48,8 @@ public class JobController {
 
 
     @DeleteMapping(path = "/{job_id}")
-    public void deleteJob(@PathVariable int job_id) {
-        jobService.deleteJob(job_id);
+    public void deleteJob(@PathVariable int jobId) {
+        jobService.deleteJob(jobId);
     }
 
 

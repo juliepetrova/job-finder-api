@@ -1,9 +1,7 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.Applicant;
-import com.webapp.ui.model.Job;
 import com.webapp.ui.repository.ApplicantRepository;
-import com.webapp.ui.repository.JobRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,7 +42,7 @@ public class ApplicantTest {
     public void testSaveApplicant(){
         Applicant applicant = createApplicant();
         when(applicantRepository.save(applicant)).thenReturn(applicant);
-        Applicant testApplicant = applicantService.createApplicant(applicant);
+        applicantService.createApplicant(applicant);
     }
 
     @Test(expected = NullPointerException.class)

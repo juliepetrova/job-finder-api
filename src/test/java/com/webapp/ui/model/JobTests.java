@@ -1,16 +1,15 @@
 package com.webapp.ui.model;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
-@RunWith(MockitoJUnitRunner.class)
+import static org.junit.Assert.assertEquals;
+
+@SpringBootTest
 public class JobTests {
 
     @Test
-    void createJob() {
+    public void createJob() {
         Job job = new Job();
         job.setTitle("Test job");
         job.setDescription("This is example");
@@ -18,11 +17,10 @@ public class JobTests {
         job.setDate("12-12-2020");
         job.setCity("Eindhoven");
         job.setAddress("Parkstraat 12");
-        Assert.hasText("Test job", job.getTitle());
-        Assert.hasText("This is example", job.getDescription());
-        Assert.hasText("12-12-2020", job.getDate());
-        Assert.hasText("Eindhoven", job.getCity());
-        Assert.hasText("Parkstraat 12", job.getAddress());
-
+        assertEquals("Test job", job.getTitle());
+        assertEquals("This is example", job.getDescription());
+        assertEquals("12-12-2020", job.getDate());
+        assertEquals("Eindhoven", job.getCity());
+        assertEquals("Parkstraat 12", job.getAddress());
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class JobApplicationServiceImpl implements JobApplicationService {
@@ -24,12 +23,12 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
-    public JobApplication findJobApplicationById(int jobApplication_id) {
-        return jobApplicationRepository.findById(jobApplication_id);
+    public JobApplication findJobApplicationById(int jobApplicationId) {
+        return jobApplicationRepository.findById(jobApplicationId);
     }
 
     @Override
-    public List<JobApplication> findJobApplicationsByApplicant(int user_id) {
-        return jobApplicationRepository.findByApplicantId(user_id);
+    public List<JobApplication> findJobApplicationsByApplicant(int userId) {
+        return jobApplicationRepository.findByApplicantId(userId);
     }
 }

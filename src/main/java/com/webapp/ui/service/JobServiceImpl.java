@@ -26,8 +26,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> findJobsByUserId(int user_id) {
-        return jobRepository.findByUser(user_id);
+    public List<Job> findJobsByUserId(int userId) {
+        return jobRepository.findByUser(userId);
     }
 
 //    TODO

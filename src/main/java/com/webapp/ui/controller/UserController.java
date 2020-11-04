@@ -2,7 +2,6 @@ package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
-import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
@@ -27,7 +26,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User registerUser(@RequestBody User user) throws Exception {
+    public User registerUser(@RequestBody User user) {
         return userService.saveUserDetails(user);
     }
 
@@ -74,8 +73,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/{user_id}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Job> getJobsByUser(@PathVariable int user_id) {
-        User user = userService.findUserById(user_id);
+    public List<Job> getJobsByUser(@PathVariable int userId) {
+        User user = userService.findUserById(userId);
         if(user.getJobs() != null) {
             return user.getJobs();
         }else {
@@ -84,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) throws Exception {
+    public User updateUser(@RequestBody User user) throws NotFoundException {
         User found = userService.saveUserDetails(user);
         if(found != null) {
             return found;
@@ -94,28 +93,28 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{user_id}")
-    public void deleteUser(@PathVariable int user_id) {
-        userService.deleteUser(user_id);
+    public void deleteUser(@PathVariable int userId) {
+        userService.deleteUser(userId);
     }
 
 
     //    Applicant
     @PostMapping(path = "/applicant")
-    public Applicant createApplicant(@RequestBody Applicant applicant) throws Exception {
+    public Applicant createApplicant(@RequestBody Applicant applicant) throws NotFoundException {
         if(applicant.getId() < 1){
             throw new InputMismatchException("User with the specified id does not exist");
         }else if (userService.findUserById(applicant.getId()) != null) {
             return applicantService.createApplicant(applicant);
         }else {
-            throw new Exception("There is no user corresponding to this applicant id.");
+            throw new NotFoundException("There is no user corresponding to this applicant id.");
         }
 
     }
 
     @GetMapping(path = "/applicant/{user_id}")
-    public Applicant getApplicant(@PathVariable int user_id) throws NotFoundException {
-        if(applicantService.findApplicantById(user_id) != null) {
-            return applicantService.findApplicantById(user_id);
+    public Applicant getApplicant(@PathVariable int userId) throws NotFoundException {
+        if(applicantService.findApplicantById(userId) != null) {
+            return applicantService.findApplicantById(userId);
         } else {
             throw new NotFoundException("Applicant not found");
         }

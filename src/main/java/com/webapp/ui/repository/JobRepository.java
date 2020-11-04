@@ -1,7 +1,6 @@
 package com.webapp.ui.repository;
 
 import com.webapp.ui.model.Job;
-import com.webapp.ui.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

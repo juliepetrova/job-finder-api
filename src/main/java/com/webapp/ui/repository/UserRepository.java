@@ -2,7 +2,6 @@ package com.webapp.ui.repository;
 
 import com.webapp.ui.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User save(User user);
 
-    void deleteById(int user_id);
+    void deleteById(int userId);
 
 
 }

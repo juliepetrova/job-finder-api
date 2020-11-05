@@ -3,13 +3,13 @@ package com.webapp.ui.controller;
 import com.webapp.ui.model.Job;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
@@ -17,16 +17,19 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-
     @GetMapping
     public List<Job> getAvailableJobs() {
         return jobService.findAllAvailableJobs();
     }
 
     @GetMapping(path="/{jobId}", produces ={MediaType.APPLICATION_JSON_VALUE})
-    public Job getJob(@PathVariable int jobId){
-
-        return jobService.findJobById(jobId);
+    public Job getJob(@PathVariable int jobId) throws NotFoundException {
+        Job job = jobService.findJobById(jobId);
+        if(job != null) {
+            return job;
+        } else {
+            throw new NotFoundException("Job with the specified id not found");
+        }
     }
 
     @GetMapping(path = "/{job_id}/user", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -41,11 +44,13 @@ public class JobController {
     }
 
     @PutMapping
-    public Job updateJob(@RequestBody Job job) {
-        return jobService.createJob(job);
+    public Job updateJob(@RequestBody Job job) throws NotFoundException {
+        if(jobService.findJobById(job.getId()) != null) {
+            return jobService.createJob(job);
+        }else{
+            throw new NotFoundException("Job not found!");
+        }
     }
-
-
 
     @DeleteMapping(path = "/{job_id}")
     public void deleteJob(@PathVariable int jobId) {

@@ -2,6 +2,7 @@ package com.webapp.ui.controller;
 
 import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.service.base.JobApplicationService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,13 @@ public class JobApplicationController {
 
 //    Get application by ID
     @GetMapping (path = "/{application_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public JobApplication getJobApplicationById(@PathVariable int applicationId){
-        return jobApplicationService.findJobApplicationById(applicationId);
+    public JobApplication getJobApplicationById(@PathVariable int applicationId) throws NotFoundException {
+        JobApplication jobApplication = jobApplicationService.findJobApplicationById(applicationId);
+        if(jobApplication != null) {
+            return jobApplication;
+        }else {
+            throw new NotFoundException("Job application not found!");
+        }
     }
 
 //    Get applications by applicant

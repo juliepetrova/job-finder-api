@@ -1,13 +1,20 @@
 package com.webapp.ui.controller;
 
-import com.webapp.ui.model.Applicant;
-import com.webapp.ui.model.Job;
-import com.webapp.ui.model.User;
+import com.webapp.ui.model.*;
+import com.webapp.ui.service.UserServiceImpl;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
+import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -24,34 +31,44 @@ public class UserController {
     @Autowired
     ApplicantService applicantService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtTokenUtil;
+
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User registerUser(@RequestBody User user) {
         return userService.saveUserDetails(user);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody Map<String, String> json) throws ServletException {
-        if (json.get("username") == null || json.get("password") == null) {
-            throw new ServletException("Please fill in username and password!");
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
         }
-        String username = json.get("username");
-        String password = json.get("password");
-
-        User user = userService.findByUsername(username);
-
-        if (user == null) {
-            throw new ServletException("Username not found!");
+        catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
         }
-        return "Not implemented";
 
-//            String pwd = user.getPassword();
-//            if(!password.equals(pwd)){
-//                throw new ServletException("Invalid password");
-//            }
-//
-//            return Jwts.builder().setSubject(username).clain("roles", "user").setIssuedAt(new Date())
-//                    .signWith(SignatureAlgorithm.HS256, "secret").compact();
+
+        final UserDetails userDetails = userService
+                .loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        User user = userService.findByUsername(authenticationRequest.getUsername());
+//        JSONObject json = new JSONObject();
+//        json.put("token", new AuthenticationResponse(jwt));
+//        json.put("user", user);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+//        return ResponseEntity.ok(json);
     }
 
 
@@ -72,7 +89,18 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/{user_id}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) throws NotFoundException {
+        User user = userService.findByUsername(username);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            throw new NotFoundException("User with the provided id not found");
+        }
+    }
+
+
+    @GetMapping(path = "/{userId}/jobs", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<Job> getJobsByUser(@PathVariable int userId) {
         User user = userService.findUserById(userId);
         if(user.getJobs() != null) {
@@ -92,7 +120,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(path = "/{user_id}")
+    @DeleteMapping(path = "/{userId}")
     public void deleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
     }
@@ -111,7 +139,7 @@ public class UserController {
 
     }
 
-    @GetMapping(path = "/applicant/{user_id}")
+    @GetMapping(path = "/applicant/{userId}")
     public Applicant getApplicant(@PathVariable int userId) throws NotFoundException {
         if(applicantService.findApplicantById(userId) != null) {
             return applicantService.findApplicantById(userId);

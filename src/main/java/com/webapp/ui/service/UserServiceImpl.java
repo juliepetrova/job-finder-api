@@ -1,20 +1,23 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.User;
+import com.webapp.ui.model.UserDetailsAuth;
 import com.webapp.ui.repository.UserRepository;
 import com.webapp.ui.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -56,4 +59,15 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Could not find user");
+        }
+
+        return new UserDetailsAuth(user);
+
+    }
 }

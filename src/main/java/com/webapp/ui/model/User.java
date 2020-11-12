@@ -13,12 +13,12 @@ public class User implements com.webapp.ui.model.base.Entity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-//    private int role;
+    private String role;
     private String first_name;
     private String last_name;
     private String email;
     private String username;
-//    private String hashed_password;
+    private String password;
     private String date_of_birth;
     private String city;
     private String country;
@@ -27,7 +27,6 @@ public class User implements com.webapp.ui.model.base.Entity {
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Job> jobs;
-
 
     public int getId() {
         return id;
@@ -115,5 +114,21 @@ public class User implements com.webapp.ui.model.base.Entity {
 
     public void setJobs(List<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

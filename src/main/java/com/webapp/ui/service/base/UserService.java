@@ -1,6 +1,7 @@
 package com.webapp.ui.service.base;
 
 import com.webapp.ui.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface UserService {
     User saveUserDetails(User user);
     void updateRating(int userId, double rating);
     void deleteUser(int userId);
+    UserDetails loadUserByUsername(String username);
 }

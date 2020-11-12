@@ -32,7 +32,7 @@ public class JobController {
         }
     }
 
-    @GetMapping(path = "/{job_id}/user", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = "/{jobId}/user", produces = {MediaType.APPLICATION_JSON_VALUE})
     public User getUserByJob(@PathVariable int jobId){
         Job job = jobService.findJobById(jobId);
         return job.getUser();
@@ -52,7 +52,7 @@ public class JobController {
         }
     }
 
-    @DeleteMapping(path = "/{job_id}")
+    @DeleteMapping(path = "/{jobId}")
     public void deleteJob(@PathVariable int jobId) {
         jobService.deleteJob(jobId);
     }

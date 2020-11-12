@@ -6,7 +6,6 @@ import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
 import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,13 +61,14 @@ public class UserController {
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        User user = userService.findByUsername(authenticationRequest.getUsername());
-//        JSONObject json = new JSONObject();
-//        json.put("token", new AuthenticationResponse(jwt));
-//        json.put("user", user);
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
-//        return ResponseEntity.ok(json);
+//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        UserDetailsAuth userDetailsAuth = (UserDetailsAuth) userDetails;
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt,
+                userDetailsAuth.getId(),
+                userDetailsAuth.getUsername(),
+                userDetailsAuth.getRole()));
     }
 
 

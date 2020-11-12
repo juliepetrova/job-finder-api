@@ -26,6 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
@@ -33,17 +34,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin().permitAll()
-//                .and()
-//                .logout().permitAll();
+
         http.cors().and().csrf().disable()
-//                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeRequests()
                 .antMatchers("/users/authenticate").permitAll()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

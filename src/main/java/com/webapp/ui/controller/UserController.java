@@ -40,8 +40,14 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User registerUser(@RequestBody User user) {
-        return userService.saveUserDetails(user);
+//        if(userService.checkIfEmailExists(user.getEmail()) || userService.checkIfUsernameExists(user.getUsername())) {
+//        Check if username or email already exists
+//        password > 8 chars
+//        email is valid
+//        }
+            return userService.saveUserDetails(user);
     }
+
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -59,16 +65,14 @@ public class UserController {
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
 
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
 
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
 
 //        return ResponseEntity.ok(new AuthenticationResponse(jwt));
         UserDetailsAuth userDetailsAuth = (UserDetailsAuth) userDetails;
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt,
-                userDetailsAuth.getId(),
-                userDetailsAuth.getUsername(),
-                userDetailsAuth.getRole()));
+                userDetailsAuth.getUser()));
     }
 
 

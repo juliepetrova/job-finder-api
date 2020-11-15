@@ -8,6 +8,8 @@ public class AuthenticationResponse implements Serializable {
     private int id;
     private String username;
     private String role;
+    private User user;
+
 
     private final String jwt;
 
@@ -17,16 +19,16 @@ public class AuthenticationResponse implements Serializable {
         this.username = username;
         this.role = role;
     }
-    public AuthenticationResponse(String jwt) {
+
+    public AuthenticationResponse(String jwt, User user) {
         this.jwt = jwt;
-        this.id = 0;
-        this.username = "";
-        this.role = "";
+        this.user = user;
     }
 
     public String getJwt() {
         return jwt;
     }
+
     public int getId() {
         return id;
     }
@@ -46,5 +48,9 @@ public class AuthenticationResponse implements Serializable {
 
     public String getRole() {
         return role;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

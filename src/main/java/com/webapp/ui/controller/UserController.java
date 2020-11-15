@@ -7,6 +7,7 @@ import com.webapp.ui.service.base.UserService;
 import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,12 +41,14 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public User registerUser(@RequestBody User user) {
-//        if(userService.checkIfEmailExists(user.getEmail()) || userService.checkIfUsernameExists(user.getUsername())) {
-//        Check if username or email already exists
+        if(!userService.checkIfEmailExists(user.getEmail()) && !userService.checkIfUsernameExists(user.getUsername())) {
 //        password > 8 chars
 //        email is valid
-//        }
+
             return userService.saveUserDetails(user);
+        }else {
+            throw new DuplicateKeyException("Username already exists!");
+        }
     }
 
 

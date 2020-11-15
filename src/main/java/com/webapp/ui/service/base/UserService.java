@@ -14,6 +14,6 @@ public interface UserService {
     void updateRating(int userId, double rating);
     void deleteUser(int userId);
     UserDetails loadUserByUsername(String username);
-//    boolean checkIfUsernameExists(String username);
-//    boolean checkIfEmailExists (String email);
+    boolean checkIfUsernameExists(String username);
+    boolean checkIfEmailExists (String email);
 }

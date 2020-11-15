@@ -58,13 +58,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.deleteById(userId);
     }
 
-//    public boolean checkIfUsernameExists(String username){
-//        return userRepository.existsUserByUsername(username);
-//    }
-//
-//    public boolean checkIfEmailExists(String email){
-//        return userRepository.existsUserByEmail(email);
-//    }
+    public boolean checkIfUsernameExists(String username){
+        return userRepository.existsUserByUsername(username);
+    }
+
+    public boolean checkIfEmailExists(String email){
+        return userRepository.existsUserByEmail(email);
+    }
 
 
 

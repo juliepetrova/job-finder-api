@@ -23,7 +23,7 @@ public class JobApplicationController {
     }
 
 //    Get application by ID
-    @GetMapping (path = "/{application_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping (path = "/{applicationId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public JobApplication getJobApplicationById(@PathVariable int applicationId) throws NotFoundException {
         JobApplication jobApplication = jobApplicationService.findJobApplicationById(applicationId);
         if(jobApplication != null) {
@@ -34,7 +34,7 @@ public class JobApplicationController {
     }
 
 //    Get applications by applicant
-    @GetMapping (path = "/applicant/{user_id}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping (path = "/applicant/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public List<JobApplication> getJobApplications (@PathVariable int userId){
         return jobApplicationService.findJobApplicationsByApplicant(userId);
     }

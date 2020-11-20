@@ -109,11 +109,37 @@ public class UserController {
     public List<Job> getJobsByUser(@PathVariable int userId) {
         User user = userService.findUserById(userId);
         if(user.getJobs() != null) {
-            return user.getJobs();
+            List<Job> jobs = new ArrayList<>();
+            for (Job job :
+                    user.getJobs()) {
+                if (job.getStatus().getId() != 2) {
+                    jobs.add(job);
+                }
+            }
+            return jobs;
         }else {
             throw new NullPointerException("This user has not posted any jobs.");
         }
     }
+
+    @GetMapping(path = "/{userId}/pastjobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Job> getPastJobsByUser(@PathVariable int userId) {
+        User user = userService.findUserById(userId);
+        if (user.getJobs() != null) {
+            List<Job> pastJobs = new ArrayList<>();
+            for (Job job :
+                    user.getJobs()) {
+                if (job.getStatus().getId() == 2) {
+                    pastJobs.add(job);
+                }
+            }
+            return pastJobs;
+        } else {
+            throw new NullPointerException("This user has 0 past jobs yet.");
+        }
+    }
+
+
 
     @PutMapping
     public User updateUser(@RequestBody User user) throws NotFoundException {

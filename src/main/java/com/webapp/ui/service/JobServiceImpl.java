@@ -1,6 +1,7 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.repository.JobRepository;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> findJobsByCity(String city) {
         return jobRepository.findByCity(city);
+    }
+
+    @Override
+    public List<Job> findJobsByStatus(Status statusId) {
+        return jobRepository.findByStatus(statusId);
     }
 
     @Override

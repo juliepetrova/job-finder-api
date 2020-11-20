@@ -57,7 +57,8 @@ public class JobApplicationController {
     @PutMapping (path = "/updateStatus/{applicationId}/{status}")
     public void changeStatus(@PathVariable int applicationId, @PathVariable int status){
         JobApplication jobApplication = jobApplicationService.findJobApplicationById(applicationId);
-        jobApplication.setStatus_id(status);
+//        jobApplication.setStatus(status);
+//        TODO find status by Id
         jobApplicationService.saveJobApplication(jobApplication);
     }
 

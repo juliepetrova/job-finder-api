@@ -1,6 +1,7 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.repository.JobRepository;
 import org.junit.Test;
@@ -34,7 +35,6 @@ public class JobServiceTests {
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
 
@@ -91,7 +91,6 @@ public class JobServiceTests {
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
 
@@ -110,7 +109,7 @@ public class JobServiceTests {
         job.setDescription("description");
         job.setTitle("title");
         job.setUser(new User());
-        job.setStatus_id(1);
+        job.setStatus(new Status());
         return job;
     }
 }

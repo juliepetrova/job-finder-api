@@ -3,6 +3,7 @@ package com.webapp.ui.controller;
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.service.base.JobApplicationService;
 import javassist.NotFoundException;
 import org.junit.Test;
@@ -76,7 +77,7 @@ public class JobApplicationControllerTest {
         jobApplication.setDate("01.11.2020");
         jobApplication.setDescription("description");
         jobApplication.setJob(new Job());
-        jobApplication.setStatus_id(1);
+        jobApplication.setStatus(new Status());
         return jobApplication;
     }
 }

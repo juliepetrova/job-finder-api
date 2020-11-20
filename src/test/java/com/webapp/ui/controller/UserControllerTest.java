@@ -2,6 +2,7 @@ package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
@@ -94,7 +95,7 @@ public class UserControllerTest {
         job.setDescription("description");
         job.setTitle("title");
         job.setUser(user);
-        job.setStatus_id(1);
+        job.setStatus(new Status());
         List<Job> jobs = new ArrayList<>();
         jobs.add(job);
         user.setJobs(jobs);

@@ -12,7 +12,7 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    private int status_id;
+//    private int status_id;
     private String description;
     private String date;
 
@@ -29,6 +29,10 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
     private Job job;
 
     @ManyToOne
+    @JoinColumn(name="status_id", nullable=false)
+    private Status status;
+
+    @ManyToOne
     @JoinColumn(name="applicant_id", nullable=false)
     @JsonBackReference
     private Applicant applicant;
@@ -43,12 +47,12 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
         this.id = id;
     }
 
-    public int getStatus_id() {
-        return status_id;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setStatus_id(int status_id) {
-        this.status_id = status_id;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getDescription() {

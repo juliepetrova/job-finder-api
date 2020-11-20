@@ -1,6 +1,7 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
 import javassist.NotFoundException;
@@ -56,7 +57,6 @@ public class JobControllerTest {
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
     
@@ -87,7 +87,6 @@ public class JobControllerTest {
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
     
@@ -107,7 +106,6 @@ public class JobControllerTest {
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
     
@@ -127,7 +125,7 @@ public class JobControllerTest {
         job.setDescription("description");
         job.setTitle("title");
         job.setUser(new User());
-        job.setStatus_id(1);
+        job.setStatus(new Status());
         job.setId(1);
         return job;
     }

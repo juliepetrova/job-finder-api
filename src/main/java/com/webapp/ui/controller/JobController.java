@@ -1,6 +1,7 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
 import javassist.NotFoundException;
@@ -19,7 +20,8 @@ public class JobController {
 
     @GetMapping
     public List<Job> getAvailableJobs() {
-        return jobService.findAllAvailableJobs();
+        Status status = new Status(1, "Available");
+        return jobService.findJobsByStatus(status);
     }
 
     @GetMapping(path="/{jobId}", produces ={MediaType.APPLICATION_JSON_VALUE})

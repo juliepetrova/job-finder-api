@@ -3,6 +3,7 @@ package com.webapp.ui.service;
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.repository.JobApplicationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +77,7 @@ public class JobApplicationServiceTests {
         jobApplication.setDate("01.11.2020");
         jobApplication.setDescription("description");
         jobApplication.setJob(new Job());
-        jobApplication.setStatus_id(1);
+        jobApplication.setStatus(new Status());
         return jobApplication;
     }
 }

@@ -10,4 +10,8 @@ public interface JobApplicationService {
     JobApplication findJobApplicationById(int jobApplicationId);
 
     List<JobApplication> findJobApplicationsByApplicant(int userId);
+
+    List<JobApplication> findJobApplicationByJobId(int jobId);
+
+    void delete(int applicationId);
 }

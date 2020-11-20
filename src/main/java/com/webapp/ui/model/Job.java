@@ -25,6 +25,7 @@ public class Job implements com.webapp.ui.model.base.Entity {
     @JsonBackReference
     private User user;
 
+
 //    @OneToMany(mappedBy="job")
 //    private Set<JobApplication> jobApplications;
 

@@ -12,4 +12,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     JobApplication save(JobApplication jobApplication);
 
     List<JobApplication> findByApplicantId(int userId);
+    List<JobApplication> findJobApplicationByJobId(int jobId);
+    void deleteById(int applicationId);
 }

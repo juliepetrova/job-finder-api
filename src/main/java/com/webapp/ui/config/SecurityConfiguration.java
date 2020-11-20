@@ -38,8 +38,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/users/authenticate").permitAll()
+                .antMatchers("/users/applicant").permitAll()
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/jobs").permitAll()
+                .antMatchers("/jobs/{job_id}").permitAll()
+                .antMatchers("/jobs/{job_id}/user").permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

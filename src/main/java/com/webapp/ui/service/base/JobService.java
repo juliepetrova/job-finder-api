@@ -11,7 +11,7 @@ public interface JobService {
     Job findJobById(int id);
     List<Job> findJobsByUserId(int userId);
     List<Job> findJobsByCity(String city);
-    List<Job> findJobsByStatus(Status statusId);
+    List<Job> findJobsByStatus(Status status);
     Job createJob(Job job);
     void deleteJob(int id);
 

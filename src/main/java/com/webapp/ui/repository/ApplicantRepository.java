@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApplicantRepository extends JpaRepository<Job, Integer> {
+public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
+
     Applicant findById(int id);
+
     Applicant save(Applicant applicant);
 }

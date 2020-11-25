@@ -170,12 +170,22 @@ public class UserController {
 
     }
 
-    @GetMapping(path = "/applicant/{userId}")
-    public Applicant getApplicant(@PathVariable int userId) throws NotFoundException {
-        if(applicantService.findApplicantById(userId) != null) {
-            return applicantService.findApplicantById(userId);
-        } else {
-            throw new NotFoundException("Applicant not found");
+    @GetMapping(path = "/applicant/{id}")
+    public Applicant getApplicant(@PathVariable int id) throws NotFoundException {
+//        if(applicantService.findApplicantById(userId) != null) {
+            return applicantService.findApplicantById(id);
+//        } else {
+//            throw new NotFoundException("Applicant not found");
+//        }
+    }
+
+    @PutMapping (path = "/applicant")
+    public Applicant updateApplicant(@RequestBody Applicant applicant) throws NotFoundException {
+        Applicant found = applicantService.updateApplicant(applicant);
+        if(found != null) {
+            return found;
+        }else{
+            throw new NotFoundException("Applicant with this id was not found!");
         }
     }
 

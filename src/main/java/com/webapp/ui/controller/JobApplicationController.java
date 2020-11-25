@@ -2,6 +2,7 @@ package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobApplicationService;
 import javassist.NotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,6 +43,19 @@ public class JobApplicationController {
         return jobApplicationService.findJobApplicationsByApplicant(userId);
     }
 
+    // Get completed applications
+    @GetMapping (path = "/pastApplications/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<JobApplication> getPastJobApplications(@PathVariable int userId){
+        List<JobApplication> applications = new ArrayList<>();
+        for (JobApplication appl:
+                jobApplicationService.findJobApplicationsByApplicant(userId)) {
+            if(appl.getStatus().getId() == 2){
+                applications.add(appl);
+            }
+        }
+         return applications;
+    }
+
 //    Get applications by job id
     @GetMapping (path = "/job/{jobId}")
     public List<JobApplication> getApplicationsByJobId(@PathVariable int jobId){
@@ -54,17 +69,19 @@ public class JobApplicationController {
         return String.valueOf(jobApplication.getApplicant().getId());
     }
 
-    @PutMapping (path = "/updateStatus/{applicationId}/{status}")
-    public void changeStatus(@PathVariable int applicationId, @PathVariable int status){
+
+    @PutMapping (path = "/updateStatus/{applicationId}/{statusId}")
+    public void changeStatus(@PathVariable int applicationId, @PathVariable int statusId){
         JobApplication jobApplication = jobApplicationService.findJobApplicationById(applicationId);
-//        jobApplication.setStatus(status);
-//        TODO find status by Id
+        Status status = new Status(statusId, "");
+        jobApplication.setStatus(status);
         jobApplicationService.saveJobApplication(jobApplication);
     }
 
-    @DeleteMapping(path = "/{applicantId}")
-    public void deleteApplication(@PathVariable int applicantId) {
-        jobApplicationService.delete(applicantId);
+
+    @DeleteMapping(path = "/{applicationId}")
+    public void deleteApplication(@PathVariable int applicationId) {
+        jobApplicationService.delete(applicationId);
     }
 }
 

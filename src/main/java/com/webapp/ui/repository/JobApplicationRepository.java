@@ -1,6 +1,7 @@
 package com.webapp.ui.repository;
 
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     List<JobApplication> findByApplicantId(int userId);
     List<JobApplication> findJobApplicationByJobId(int jobId);
+    List<JobApplication> findByStatus(Status status);
     void deleteById(int applicationId);
 }

@@ -25,4 +25,9 @@ public class ApplicantServiceImpl implements ApplicantService {
         }
         return applicantRepository.save(applicant);
     }
+
+    @Override
+    public Applicant updateApplicant(Applicant applicant) {
+        return applicantRepository.save(applicant);
+    }
 }

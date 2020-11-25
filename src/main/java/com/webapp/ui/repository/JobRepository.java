@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     List<Job> findAll();
 
 //    @Query(value = "FROM Job j WHERE j.status_id = ?1") //This is using a named query method
-    List<Job> findByStatus(Status statusId);
+    List<Job> findByStatus(Status status);
 
     void deleteById(int id);
 

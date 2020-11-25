@@ -6,4 +6,6 @@ public interface ApplicantService {
     Applicant findApplicantById(int id);
 
     Applicant createApplicant(Applicant applicant);
+
+    Applicant updateApplicant(Applicant applicant);
 }

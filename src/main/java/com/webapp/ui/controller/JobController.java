@@ -1,6 +1,7 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
@@ -52,6 +53,13 @@ public class JobController {
         }else{
             throw new NotFoundException("Job not found!");
         }
+    }
+    @PutMapping (path = "/updateStatus/{jobId}/{statusId}")
+    public void changeStatus(@PathVariable int jobId, @PathVariable int statusId){
+        Job job = jobService.findJobById(jobId);
+        Status status = new Status(statusId, "");
+        job.setStatus(status);
+        jobService.createJob(job);
     }
 
     @DeleteMapping(path = "/{jobId}")

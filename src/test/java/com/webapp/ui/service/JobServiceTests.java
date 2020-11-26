@@ -9,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +69,9 @@ public class JobServiceTests {
         jobs.add(createJob());
         jobs.add(createJob());
         jobs.add(createJob());
-        when(jobRepository.findByCity("city")).thenReturn(jobs);
-        List<Job> testJobs = jobService.findJobsByCity("city");
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByCity("city", firstPage)).thenReturn((Page<Job>) jobs);
+        List<Job> testJobs = (List<Job>) jobService.findJobsByCity("city", firstPage);
         assertEquals(jobs, testJobs);
         assertEquals(jobs.size(), testJobs.size());
     }
@@ -75,8 +79,9 @@ public class JobServiceTests {
     @Test
     public void testGetJobsByCityWhenZero(){
         List<Job> jobs = new ArrayList<>();
-        when(jobRepository.findByCity("city")).thenReturn(jobs);
-        List<Job> testJobs = jobService.findJobsByCity("city");
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByCity("city", firstPage)).thenReturn((Page<Job>) jobs);
+        List<Job> testJobs = (List<Job>) jobService.findJobsByCity("city", firstPage);
         assertEquals(jobs, testJobs);
         assertEquals(jobs.size(), testJobs.size());
     }

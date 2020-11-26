@@ -1,16 +1,24 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Job;
-import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.JobService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/jobs")
@@ -19,10 +27,38 @@ public class JobController {
     @Autowired
     JobService jobService;
 
+//    @GetMapping
+//    public List<Job> getAvailableJobs() {
+//        Status status = new Status(1, "Available");
+//        return jobService.findJobsByStatus(status);
+//    }
     @GetMapping
-    public List<Job> getAvailableJobs() {
-        Status status = new Status(1, "Available");
-        return jobService.findJobsByStatus(status);
+    public ResponseEntity<Map<String, Object>> getByCity(@RequestParam(required = false) String city,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "12") int size){
+        try {
+            List<Job> jobs = new ArrayList<>();
+            Pageable paging = PageRequest.of(page, size);
+
+            Page<Job> filteredJobs;
+            if (city == null) {
+                Status status = new Status(1, "Available");
+                filteredJobs = jobService.findJobsByStatus(status, paging);
+            }
+            else {
+                filteredJobs = jobService.findJobsByCity(city, paging);
+            }
+            jobs = filteredJobs.getContent();
+            Map<String, Object> response = new HashMap<>();
+            response.put("jobs", jobs);
+            response.put("currentPage", filteredJobs.getNumber());
+            response.put("totalItems", filteredJobs.getTotalElements());
+            response.put("totalPages", filteredJobs.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(path="/{jobId}", produces ={MediaType.APPLICATION_JSON_VALUE})

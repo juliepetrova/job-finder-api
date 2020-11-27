@@ -3,6 +3,7 @@ package com.webapp.ui.service;
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.repository.JobApplicationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,22 +29,34 @@ public class JobApplicationServiceTests {
 
     @Test
     public void testFindJobApplicationById(){
-        when(jobApplicationRepository.findById(1)).thenReturn(createJobApplication());
+        // Arrange
+        JobApplication jobAppl = createJobApplication();
+        // Act
+        when(jobApplicationRepository.findById(1)).thenReturn(jobAppl);
         JobApplication testJobApplication = jobApplicationService.findJobApplicationById(1);
+        // Assert
         assertEquals("01.11.2020", testJobApplication.getDate());
         assertEquals("description", testJobApplication.getDescription());
     }
 
     @Test
     public void testFindJobApplicationByWrongId(){
-        when(jobApplicationRepository.findById(1)).thenReturn(null);
+        // Arrange
+        JobApplication jobApplication = null;
+        // Act
+        when(jobApplicationRepository.findById(1)).thenReturn(jobApplication);
+        // Assert
         assertNull(jobApplicationService.findJobApplicationById(1));
     }
 
     @Test
     public void testFindJobApplicationsByApplicant(){
-        when(jobApplicationRepository.findByApplicantId(1)).thenReturn(new ArrayList<>());
+        // Arrange
+        List<JobApplication> jobApplications = new ArrayList<>();
+        // Act
+        when(jobApplicationRepository.findByApplicantId(1)).thenReturn(jobApplications);
         List<JobApplication> testJobApplications = jobApplicationService.findJobApplicationsByApplicant(1);
+        // Assert
         assertEquals(new ArrayList<>(), testJobApplications);
         assertEquals((new ArrayList<>()).size(), testJobApplications.size());
     }
@@ -57,9 +70,12 @@ public class JobApplicationServiceTests {
 
     @Test
     public void testSaveJobApplication(){
+        // Arrange
         JobApplication jobApplication = createJobApplication();
+        // Act
         when(jobApplicationRepository.save(jobApplication)).thenReturn(jobApplication);
         JobApplication tested = jobApplicationService.saveJobApplication(jobApplication);
+        // Assert
         assertEquals("01.11.2020", tested.getDate());
         assertEquals("description", tested.getDescription());
     }
@@ -76,7 +92,7 @@ public class JobApplicationServiceTests {
         jobApplication.setDate("01.11.2020");
         jobApplication.setDescription("description");
         jobApplication.setJob(new Job());
-        jobApplication.setStatus_id(1);
+        jobApplication.setStatus(new Status());
         return jobApplication;
     }
 }

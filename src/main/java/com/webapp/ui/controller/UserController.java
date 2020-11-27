@@ -8,6 +8,7 @@ import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,14 +41,11 @@ public class UserController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public User registerUser(@RequestBody User user) {
-        if(!userService.checkIfEmailExists(user.getEmail()) && !userService.checkIfUsernameExists(user.getUsername())) {
-//        password > 8 chars
-//        email is valid
-
-            return userService.saveUserDetails(user);
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
+        if(userService.checkIfEmailExists(user.getEmail()) || userService.checkIfUsernameExists(user.getUsername())){
+            return new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
         }else {
-            throw new DuplicateKeyException("Username already exists!");
+            return ResponseEntity.ok(userService.saveUserDetails(user));
         }
     }
 
@@ -111,15 +109,41 @@ public class UserController {
     public List<Job> getJobsByUser(@PathVariable int userId) {
         User user = userService.findUserById(userId);
         if(user.getJobs() != null) {
-            return user.getJobs();
+            List<Job> jobs = new ArrayList<>();
+            for (Job job :
+                    user.getJobs()) {
+                if (job.getStatus().getId() != 2) {
+                    jobs.add(job);
+                }
+            }
+            return jobs;
         }else {
             throw new NullPointerException("This user has not posted any jobs.");
         }
     }
 
+    @GetMapping(path = "/{userId}/pastjobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<Job> getPastJobsByUser(@PathVariable int userId) {
+        User user = userService.findUserById(userId);
+        if (user.getJobs() != null) {
+            List<Job> pastJobs = new ArrayList<>();
+            for (Job job :
+                    user.getJobs()) {
+                if (job.getStatus().getId() == 2) {
+                    pastJobs.add(job);
+                }
+            }
+            return pastJobs;
+        } else {
+            throw new NullPointerException("This user has 0 past jobs yet.");
+        }
+    }
+
+
+
     @PutMapping
     public User updateUser(@RequestBody User user) throws NotFoundException {
-        User found = userService.saveUserDetails(user);
+        User found = userService.updateUser(user);
         if(found != null) {
             return found;
         }else{
@@ -146,12 +170,22 @@ public class UserController {
 
     }
 
-    @GetMapping(path = "/applicant/{userId}")
-    public Applicant getApplicant(@PathVariable int userId) throws NotFoundException {
-        if(applicantService.findApplicantById(userId) != null) {
-            return applicantService.findApplicantById(userId);
+    @GetMapping(path = "/applicant/{id}")
+    public Applicant getApplicant(@PathVariable int id) throws NotFoundException {
+        if(applicantService.findApplicantById(id) != null) {
+            return applicantService.findApplicantById(id);
         } else {
             throw new NotFoundException("Applicant not found");
+        }
+    }
+
+    @PutMapping (path = "/applicant")
+    public Applicant updateApplicant(@RequestBody Applicant applicant) throws NotFoundException {
+        Applicant found = applicantService.updateApplicant(applicant);
+        if(found != null) {
+            return found;
+        }else{
+            throw new NotFoundException("Applicant with this id was not found!");
         }
     }
 

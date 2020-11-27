@@ -1,10 +1,14 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.repository.JobRepository;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -30,13 +34,14 @@ public class JobServiceImpl implements JobService {
         return jobRepository.findByUser(userId);
     }
 
-//    TODO
-    public List<Job> findCurrentJobsByUserId(){return null;}
-    public List<Job> findCompletedJobsBYUser(){return null;}
+    @Override
+    public Page<Job> findJobsByCity(String city, Pageable pageable) {
+        return jobRepository.findByCity(city, pageable);
+    }
 
     @Override
-    public List<Job> findJobsByCity(String city) {
-        return jobRepository.findByCity(city);
+    public Page<Job> findJobsByStatus(Status statusId, Pageable pageable) {
+        return jobRepository.findByStatus(statusId, pageable);
     }
 
     @Override

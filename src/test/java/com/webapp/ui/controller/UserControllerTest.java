@@ -2,6 +2,7 @@ package com.webapp.ui.controller;
 
 import com.webapp.ui.model.Applicant;
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
@@ -32,42 +33,54 @@ public class UserControllerTest {
     UserController userController;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testGetUsers(){
+    public void testGetUsers() {
+        // Arrange
         List<User> users = new ArrayList<>();
         users.add(createUser());
         users.add(createUser());
         users.add(createUser());
         users.add(createUser());
         users.add(createUser());
+        // Act
         when(userService.findAllUsers()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userController.getUsers().size());
     }
 
     @Test
     public void testGetUsersWhenEmpty() {
+        // Arrange
         List<User> users = new ArrayList<>();
+        // Act
         when(userService.findAllUsers()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userController.getUsers().size());
     }
 
     @Test
-    public void testGetUsersWhenSingleUser(){
+    public void testGetUsersWhenSingleUser() {
+        // Arrange
         List<User> users = new ArrayList<>();
         users.add(createUser());
+        // Act
         when(userService.findAllUsers()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userController.getUsers().size());
     }
 
     @Test
     public void testGetUserById() throws NotFoundException {
+        // Arrange
         User user = createUser();
+        // Act
         when(userService.findUserById(1)).thenReturn(user);
         User testUser = userController.getUser(1);
+        // Assert
         assertEquals(1, testUser.getId());
         assertEquals("first", testUser.getFirst_name());
         assertEquals("last", testUser.getLast_name());
@@ -84,7 +97,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetJobsByUser(){
+    public void testGetJobsByUser() {
+        // Arrange
         User user = createUser();
         Job job = new Job();
         job.setAddress("address");
@@ -94,26 +108,34 @@ public class UserControllerTest {
         job.setDescription("description");
         job.setTitle("title");
         job.setUser(user);
-        job.setStatus_id(1);
+        job.setStatus(new Status());
         List<Job> jobs = new ArrayList<>();
         jobs.add(job);
         user.setJobs(jobs);
+        // Act
         when(userService.findUserById(1)).thenReturn(user);
+        // Assert
         assertEquals(1, userController.getJobsByUser(1).size());
     }
 
     @Test(expected = NullPointerException.class)
-    public void testGetJobsByUserWhenEmpty(){
+    public void testGetJobsByUserWhenEmpty() {
+        // Arrange
         User user = createUser();
+        // Act
         when(userService.findUserById(1)).thenReturn(user);
+        // Assert
         userController.getJobsByUser(1);
     }
 
     @Test
     public void testUpdateUser() throws Exception {
+        // Arrange
         User user = createUser();
-        when(userService.saveUserDetails(user)).thenReturn(user);
+        // Act
+        when(userService.updateUser(user)).thenReturn(user);
         User testUser = userController.updateUser(user);
+        // Assert
         assertEquals(1, testUser.getId());
         assertEquals("first", testUser.getFirst_name());
         assertEquals("last", testUser.getLast_name());
@@ -123,10 +145,12 @@ public class UserControllerTest {
         assertEquals("Vienna", testUser.getCity());
     }
 
-    @Test (expected = NotFoundException.class)
+    @Test(expected = NotFoundException.class)
     public void testUpdateUserNotExisting() throws Exception {
+        // Arrange
         User user = createUser();
-        when(userService.saveUserDetails(user)).thenReturn(null);
+        // Act (expect exception)
+//        when(userService.saveUserDetails(user)).thenReturn(null);
         user.setId(211);
         userController.updateUser(user);
     }
@@ -145,20 +169,27 @@ public class UserControllerTest {
         return user;
     }
 
-//    Applicant
-@Test
-public void testGetApplicantById() throws NotFoundException {
-    Applicant applicant = new Applicant();
-    applicant.setId(1); applicant.setSkills("skills"); applicant.setRating(4); applicant.setPicture("picture"); applicant.setExperience("experience");
-    when(applicantService.findApplicantById(1)).thenReturn(applicant);
-    Applicant testApplicant = userController.getApplicant(1);
-    assertEquals(1, testApplicant.getId());
-    assertEquals("skills", testApplicant.getSkills());
-    assertEquals(4, testApplicant.getRating(),1);
-    assertEquals("picture", testApplicant.getPicture());
-    assertEquals("experience", testApplicant.getExperience());
+    //    Applicant
+    @Test
+    public void testGetApplicantById() throws NotFoundException {
+        // Arrange
+        Applicant applicant = new Applicant();
+        applicant.setId(1);
+        applicant.setSkills("skills");
+        applicant.setRating(4);
+        applicant.setPicture("picture");
+        applicant.setExperience("experience");
+        // Act
+        when(applicantService.findApplicantById(1)).thenReturn(applicant);
+        Applicant testApplicant = userController.getApplicant(1);
+        // Assert
+        assertEquals(1, testApplicant.getId());
+        assertEquals("skills", testApplicant.getSkills());
+        assertEquals(4, testApplicant.getRating(), 1);
+        assertEquals("picture", testApplicant.getPicture());
+        assertEquals("experience", testApplicant.getExperience());
 
-}
+    }
 
     @Test(expected = NotFoundException.class)
     public void testGetApplicantByIdInvalid() throws NotFoundException {
@@ -168,14 +199,21 @@ public void testGetApplicantById() throws NotFoundException {
 
     @Test
     public void testCreateApplicant() throws Exception {
+        // Arrange
         Applicant applicant = new Applicant();
-        applicant.setId(1); applicant.setSkills("skills"); applicant.setRating(4); applicant.setPicture("picture"); applicant.setExperience("experience");
+        applicant.setId(1);
+        applicant.setSkills("skills");
+        applicant.setRating(4);
+        applicant.setPicture("picture");
+        applicant.setExperience("experience");
+        // Act
         when(userService.findUserById(1)).thenReturn(createUser());
         when(applicantService.createApplicant(applicant)).thenReturn(applicant);
         Applicant testApplicant = userController.createApplicant(applicant);
+        // Assert
         assertEquals(1, testApplicant.getId());
         assertEquals("skills", testApplicant.getSkills());
-        assertEquals(4, testApplicant.getRating(),1);
+        assertEquals(4, testApplicant.getRating(), 1);
         assertEquals("picture", testApplicant.getPicture());
         assertEquals("experience", testApplicant.getExperience());
 
@@ -184,7 +222,11 @@ public void testGetApplicantById() throws NotFoundException {
     @Test(expected = Exception.class)
     public void testCreateApplicantIncorrectInput() throws Exception {
         Applicant applicant = new Applicant();
-        applicant.setId(1); applicant.setSkills("skills"); applicant.setRating(4); applicant.setPicture("picture"); applicant.setExperience("experience");
+        applicant.setId(1);
+        applicant.setSkills("skills");
+        applicant.setRating(4);
+        applicant.setPicture("picture");
+        applicant.setExperience("experience");
         when(userService.findUserById(1)).thenReturn(null);
         userController.createApplicant(applicant);
     }

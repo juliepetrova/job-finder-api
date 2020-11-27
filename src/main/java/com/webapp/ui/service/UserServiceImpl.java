@@ -44,6 +44,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User updateUser(User user){
+        if(user == null || user.getEmail() == null){
+            throw new NullPointerException();
+        }
+        else {
+            return userRepository.save(user);
+        }
+    }
+
+    @Override
     public void updateRating(int user_id, double rating) {
 //        Should be moved into Applicant
     }

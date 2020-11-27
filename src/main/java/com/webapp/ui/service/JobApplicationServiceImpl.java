@@ -1,6 +1,7 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.JobApplication;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.repository.JobApplicationRepository;
 import com.webapp.ui.service.base.JobApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,20 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public List<JobApplication> findJobApplicationsByApplicant(int userId) {
         return jobApplicationRepository.findByApplicantId(userId);
+    }
+
+    @Override
+    public List<JobApplication> findJobApplicationByJobId(int jobId) {
+        return jobApplicationRepository.findJobApplicationByJobId(jobId);
+    }
+
+    @Override
+    public List<JobApplication> findJobApplicationsByStatus(Status status) {
+        return jobApplicationRepository.findByStatus(status);
+    }
+
+    @Override
+    public void delete(int applicationId) {
+        jobApplicationRepository.deleteById(applicationId);
     }
 }

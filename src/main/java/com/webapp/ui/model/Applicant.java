@@ -10,7 +10,7 @@ import java.util.List;
 public class Applicant implements com.webapp.ui.model.base.Entity{
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     private int id;
     private String picture;
     private String skills;

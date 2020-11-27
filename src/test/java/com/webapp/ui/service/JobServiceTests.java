@@ -1,6 +1,7 @@
 package com.webapp.ui.service;
 
 import com.webapp.ui.model.Job;
+import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
 import com.webapp.ui.repository.JobRepository;
 import org.junit.Test;
@@ -8,7 +9,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,71 +32,97 @@ public class JobServiceTests {
 
     @Test
     public void testGetJobById(){
-        when(jobRepository.findById(1)).thenReturn(createJob());
+        // Arrange
+        Job job = createJob();
+        // Act
+        when(jobRepository.findById(1)).thenReturn(job);
         Job testJob = jobService.findJobById(1);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
 
     @Test
     public void getJobByWrongId(){
-        when(jobRepository.findById(1)).thenReturn(null);
+        // Arrange
+        Job job = null;
+        // Act
+        when(jobRepository.findById(1)).thenReturn(job);
         Job testJob = jobService.findJobById(1);
+        // Assert
         assertNull(testJob);
     }
 
     @Test
     public void testGetJobsByUserId(){
-        when(jobRepository.findByUser(1)).thenReturn(new ArrayList<>());
+        // Arrange
+        List<Job> jobs = new ArrayList<>();
+        // Act
+        when(jobRepository.findByUser(1)).thenReturn(jobs);
         List<Job> testJobs = jobService.findJobsByUserId(1);
-        assertEquals(new ArrayList<>(), testJobs);
-        assertEquals((new ArrayList<>()).size(), testJobs.size());
+        // Assert
+        assertEquals(jobs, testJobs);
+        assertEquals(jobs.size(), testJobs.size());
     }
 
     @Test
     public void testGetJobsByWrongUserId(){
-        when(jobRepository.findByUser(1)).thenReturn(null);
+        // Arrange
+        List<Job> jobs = null;
+        // Act
+        when(jobRepository.findByUser(1)).thenReturn(jobs);
         List<Job> testJobs = jobService.findJobsByUserId(1);
+        // Assert
         assertNull(testJobs);
     }
 
     @Test
     public void testGetJobsByCity(){
+        // Arrange
         List<Job> jobs = new ArrayList<>();
         jobs.add(createJob());
         jobs.add(createJob());
         jobs.add(createJob());
-        when(jobRepository.findByCity("city")).thenReturn(jobs);
-        List<Job> testJobs = jobService.findJobsByCity("city");
-        assertEquals(jobs, testJobs);
-        assertEquals(jobs.size(), testJobs.size());
+        Page<Job> page = new PageImpl<>(jobs);
+        // Act
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByCity("city", firstPage)).thenReturn(page);
+        Page<Job> testJobs = jobService.findJobsByCity("city", firstPage);
+        // Assert
+        assertEquals(page, testJobs);
     }
 
     @Test
     public void testGetJobsByCityWhenZero(){
+        // Arrange
         List<Job> jobs = new ArrayList<>();
-        when(jobRepository.findByCity("city")).thenReturn(jobs);
-        List<Job> testJobs = jobService.findJobsByCity("city");
-        assertEquals(jobs, testJobs);
-        assertEquals(jobs.size(), testJobs.size());
+        Page<Job> page = new PageImpl<>(jobs);
+        // Act
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByCity("city", firstPage)).thenReturn((page));
+        Page<Job> testJobs =jobService.findJobsByCity("city", firstPage);
+        // Assert
+        assertEquals(page, testJobs);
+
     }
 
     @Test
     public void testSaveJob(){
+        // Arrange
         Job job = createJob();
+        // Act
         when(jobRepository.save(job)).thenReturn(job);
         Job testJob = jobService.createJob(job);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());
         assertEquals("description", testJob.getDescription());
         assertEquals(120, testJob.getPayment(), 1);
-        assertEquals(1, testJob.getStatus_id());
         assertEquals("title", testJob.getTitle());
     }
 
@@ -110,7 +141,7 @@ public class JobServiceTests {
         job.setDescription("description");
         job.setTitle("title");
         job.setUser(new User());
-        job.setStatus_id(1);
+        job.setStatus(new Status());
         return job;
     }
 }

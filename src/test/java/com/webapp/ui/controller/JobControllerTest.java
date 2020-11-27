@@ -49,9 +49,12 @@ public class JobControllerTest {
     
     @Test 
     public void testGetJobById() throws NotFoundException {
+        // Arrange
         Job job = createJob();
+        // Act
         when(jobService.findJobById(1)).thenReturn(job);
         Job testJob = jobController.getJob(1);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());
@@ -62,26 +65,33 @@ public class JobControllerTest {
     
     @Test (expected = NotFoundException.class)
     public void testGetJobByInvalidId() throws NotFoundException {
+        // Expect failure
         when(jobService.findJobById(1)).thenReturn(null);
         jobController.getJob(1);
     }
     
     @Test
     public void testGetUserByJob(){
+        // Arrange
         Job job = createJob();
         User u = new User();
         job.setUser(u);
+        // Act
         when(jobService.findJobById(1)).thenReturn(job);
         User user = jobController.getUserByJob(1);
+        // Assert
         assertEquals(u, user);
 
     }
     
     @Test
     public void testCreateJob(){
+        // Arrange
         Job job = createJob();
+        // Act
         when(jobService.createJob(job)).thenReturn(job);
         Job testJob = jobController.createJob(job);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());
@@ -90,17 +100,16 @@ public class JobControllerTest {
         assertEquals("title", testJob.getTitle());
     }
     
-    @Test 
-    public void testCreateJobInvalidInput(){
-//        To be implemented
-    }
-    
+
     @Test
     public void testUpdateJob() throws NotFoundException {
+        // Arrange
         Job job = createJob();
+        // Act
         when(jobService.findJobById(1)).thenReturn(job);
         when(jobService.createJob(job)).thenReturn(job);
         Job testJob = jobController.updateJob(job);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());

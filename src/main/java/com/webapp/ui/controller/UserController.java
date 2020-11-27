@@ -172,11 +172,11 @@ public class UserController {
 
     @GetMapping(path = "/applicant/{id}")
     public Applicant getApplicant(@PathVariable int id) throws NotFoundException {
-//        if(applicantService.findApplicantById(userId) != null) {
+        if(applicantService.findApplicantById(id) != null) {
             return applicantService.findApplicantById(id);
-//        } else {
-//            throw new NotFoundException("Applicant not found");
-//        }
+        } else {
+            throw new NotFoundException("Applicant not found");
+        }
     }
 
     @PutMapping (path = "/applicant")

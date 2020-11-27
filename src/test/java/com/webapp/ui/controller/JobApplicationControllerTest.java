@@ -29,17 +29,24 @@ public class JobApplicationControllerTest {
 
     @Test
     public void testCreateApplication(){
+        // Arrange
         JobApplication jobApplication = createJobApplication();
+        // Act
         when(jobApplicationService.saveJobApplication(jobApplication)).thenReturn(jobApplication);
         JobApplication tested = jobApplicationController.createJobApplication(jobApplication);
+        // Assert
         assertEquals("01.11.2020", tested.getDate());
         assertEquals("description", tested.getDescription());
     }
 
     @Test
     public void testGetApplicationById() throws NotFoundException {
-        when(jobApplicationService.findJobApplicationById(1)).thenReturn(createJobApplication());
+        // Arrange
+        JobApplication jobApplication = createJobApplication();
+        // Act
+        when(jobApplicationService.findJobApplicationById(1)).thenReturn(jobApplication);
         JobApplication testJobApplication = jobApplicationController.getJobApplicationById(1);
+        // Assert
         assertEquals("01.11.2020", testJobApplication.getDate());
         assertEquals("description", testJobApplication.getDescription());
     }
@@ -52,22 +59,28 @@ public class JobApplicationControllerTest {
 
     @Test
     public void testGetApplicationsByApplicantId(){
+        // Arrange
         List<JobApplication> jobApplications = new ArrayList<>();
         jobApplications.add(createJobApplication());
         jobApplications.add(createJobApplication());
         jobApplications.add(createJobApplication());
         jobApplications.add(createJobApplication());
+        // Act
         when(jobApplicationService.findJobApplicationsByApplicant(1)).thenReturn(jobApplications);
         List<JobApplication> foundJobApplications = jobApplicationController.getJobApplications(1);
+        // Assert
         assertEquals(jobApplications.size(), foundJobApplications.size());
 
     }
 
     @Test
     public void testGetApplicationsByApplicantIdWithZeroApplications(){
+        // Arrange
         List<JobApplication> jobApplications = new ArrayList<>();
+        // Act
         when(jobApplicationService.findJobApplicationsByApplicant(1)).thenReturn(jobApplications);
         List<JobApplication> foundJobApplications = jobApplicationController.getJobApplications(1);
+        // Assert
         assertEquals(jobApplications.size(), foundJobApplications.size());
     }
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,8 +26,12 @@ public class UserServiceTests {
 
     @Test
     public void testFindById() {
-        when(userRepository.findById(1)).thenReturn(createUser());
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userRepository.findById(1)).thenReturn(user);
         User testUser = userService.findUserById(1);
+        // Assert
         assertEquals("first", testUser.getFirst_name());
         assertEquals("last", testUser.getLast_name());
         assertEquals("1234", testUser.getPhone_number());
@@ -38,15 +43,23 @@ public class UserServiceTests {
 
     @Test
     public void testFindByIdDoesNotExist() {
-        when(userRepository.findById(1)).thenReturn(null);
+        // Arrange
+        User user = null;
+        // Act
+        when(userRepository.findById(1)).thenReturn(user);
         User testUser = userService.findUserById(1);
-        assertEquals(null, testUser);
+        // Assert
+        assertNull(testUser);
     }
 
     @Test
     public void testFindByEmail() {
-        when(userRepository.findByEmail("email@email.com")).thenReturn(createUser());
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userRepository.findByEmail("email@email.com")).thenReturn(user);
         User testUser = userService.findUserByEmail("email@email.com");
+        // Assert
         assertEquals(1, testUser.getId());
         assertEquals("first", testUser.getFirst_name());
         assertEquals("last", testUser.getLast_name());
@@ -58,44 +71,60 @@ public class UserServiceTests {
 
     @Test
     public void testFindByEmailDoesNotExist() {
-        when(userRepository.findByEmail("email@email.com")).thenReturn(null);
+        // Arrange
+        User user = null;
+        // Act
+        when(userRepository.findByEmail("email@email.com")).thenReturn(user);
         User testUser = userService.findUserByEmail("email@email.com");
+        // Assert
         assertEquals(null, testUser);
     }
 
     @Test
     public void testFindAllUsers(){
+        // Arrange
         List<User> users = new ArrayList<>();
         users.add(createUser());
         users.add(createUser());
         users.add(createUser());
+        // Act
         when(userRepository.findAll()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userService.findAllUsers().size());
         assertEquals(users, userService.findAllUsers());
     }
 
     @Test
     public void testFindAllUsersWhenNone() {
+        // Arrange
         List<User> users = new ArrayList<>();
+        // Act
         when(userRepository.findAll()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userService.findAllUsers().size());
         assertEquals(users, userService.findAllUsers());
     }
 
     @Test
     public void testFindAllUsersWhenOne(){
+        // Arrange
         List<User> users = new ArrayList<>();
         users.add(createUser());
+        // Act
         when(userRepository.findAll()).thenReturn(users);
+        // Assert
         assertEquals(users.size(), userService.findAllUsers().size());
         assertEquals(users, userService.findAllUsers());
     }
 
     @Test
     public void testSaveUser() throws Exception {
+        // Arrange
         User u = createUser();
+        // Act
         when(userRepository.save(u)).thenReturn(u);
         User testUser = userService.saveUserDetails(u);
+        // Assert
         assertEquals(1, testUser.getId());
         assertEquals("first", testUser.getFirst_name());
         assertEquals("last", testUser.getLast_name());
@@ -113,8 +142,11 @@ public class UserServiceTests {
 
     @Test(expected = Exception.class)
     public void testSaveUserWithDuplicatedEmail() throws Exception {
-        when(userRepository.findByEmail("email@email.com")).thenReturn(createUser());
-        userService.saveUserDetails(createUser());
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userRepository.findByEmail("email@email.com")).thenReturn(user);
+        userService.saveUserDetails(user);
     }
 
     public User createUser(){

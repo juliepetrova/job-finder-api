@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.data.domain.Pageable;
@@ -31,8 +32,12 @@ public class JobServiceTests {
 
     @Test
     public void testGetJobById(){
-        when(jobRepository.findById(1)).thenReturn(createJob());
+        // Arrange
+        Job job = createJob();
+        // Act
+        when(jobRepository.findById(1)).thenReturn(job);
         Job testJob = jobService.findJobById(1);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());
@@ -43,54 +48,76 @@ public class JobServiceTests {
 
     @Test
     public void getJobByWrongId(){
-        when(jobRepository.findById(1)).thenReturn(null);
+        // Arrange
+        Job job = null;
+        // Act
+        when(jobRepository.findById(1)).thenReturn(job);
         Job testJob = jobService.findJobById(1);
+        // Assert
         assertNull(testJob);
     }
 
     @Test
     public void testGetJobsByUserId(){
-        when(jobRepository.findByUser(1)).thenReturn(new ArrayList<>());
+        // Arrange
+        List<Job> jobs = new ArrayList<>();
+        // Act
+        when(jobRepository.findByUser(1)).thenReturn(jobs);
         List<Job> testJobs = jobService.findJobsByUserId(1);
-        assertEquals(new ArrayList<>(), testJobs);
-        assertEquals((new ArrayList<>()).size(), testJobs.size());
+        // Assert
+        assertEquals(jobs, testJobs);
+        assertEquals(jobs.size(), testJobs.size());
     }
 
     @Test
     public void testGetJobsByWrongUserId(){
-        when(jobRepository.findByUser(1)).thenReturn(null);
+        // Arrange
+        List<Job> jobs = null;
+        // Act
+        when(jobRepository.findByUser(1)).thenReturn(jobs);
         List<Job> testJobs = jobService.findJobsByUserId(1);
+        // Assert
         assertNull(testJobs);
     }
 
     @Test
     public void testGetJobsByCity(){
+        // Arrange
         List<Job> jobs = new ArrayList<>();
         jobs.add(createJob());
         jobs.add(createJob());
         jobs.add(createJob());
+        Page<Job> page = new PageImpl<>(jobs);
+        // Act
         Pageable firstPage = (Pageable) PageRequest.of(0, 10);
-        when(jobRepository.findByCity("city", firstPage)).thenReturn((Page<Job>) jobs);
-        List<Job> testJobs = (List<Job>) jobService.findJobsByCity("city", firstPage);
-        assertEquals(jobs, testJobs);
-        assertEquals(jobs.size(), testJobs.size());
+        when(jobRepository.findByCity("city", firstPage)).thenReturn(page);
+        Page<Job> testJobs = jobService.findJobsByCity("city", firstPage);
+        // Assert
+        assertEquals(page, testJobs);
     }
 
     @Test
     public void testGetJobsByCityWhenZero(){
+        // Arrange
         List<Job> jobs = new ArrayList<>();
+        Page<Job> page = new PageImpl<>(jobs);
+        // Act
         Pageable firstPage = (Pageable) PageRequest.of(0, 10);
-        when(jobRepository.findByCity("city", firstPage)).thenReturn((Page<Job>) jobs);
-        List<Job> testJobs = (List<Job>) jobService.findJobsByCity("city", firstPage);
-        assertEquals(jobs, testJobs);
-        assertEquals(jobs.size(), testJobs.size());
+        when(jobRepository.findByCity("city", firstPage)).thenReturn((page));
+        Page<Job> testJobs =jobService.findJobsByCity("city", firstPage);
+        // Assert
+        assertEquals(page, testJobs);
+
     }
 
     @Test
     public void testSaveJob(){
+        // Arrange
         Job job = createJob();
+        // Act
         when(jobRepository.save(job)).thenReturn(job);
         Job testJob = jobService.createJob(job);
+        // Assert
         assertEquals("address", testJob.getAddress());
         assertEquals("city", testJob.getCity());
         assertEquals("01.11.2020", testJob.getDate());

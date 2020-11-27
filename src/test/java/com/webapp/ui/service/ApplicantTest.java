@@ -33,20 +33,24 @@ public class ApplicantTest {
     }
 
     @Test
-    public void testGetApplicantByWrongId(){
+    public void testGetApplicantByWrongId() {
         when(applicantRepository.findById(12)).thenReturn(null);
         assertNull(applicantService.findApplicantById(12));
     }
 
     @Test
-    public void testSaveApplicant(){
+    public void testSaveApplicant() {
+        // Arrange
         Applicant applicant = createApplicant();
+        // Act
         when(applicantRepository.save(applicant)).thenReturn(applicant);
-        applicantService.createApplicant(applicant);
+        Applicant test = applicantService.createApplicant(applicant);
+        // Assert
+        assertEquals(applicant.getId(), test.getId());
     }
 
     @Test(expected = NullPointerException.class)
-    public void testSaveNullApplicant(){
+    public void testSaveNullApplicant() {
         applicantService.createApplicant(new Applicant());
     }
 

@@ -177,7 +177,6 @@ public class UserControllerTest {
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         // Act
         when(applicantService.findApplicantById(1)).thenReturn(applicant);
@@ -186,7 +185,7 @@ public class UserControllerTest {
         assertEquals(1, testApplicant.getId());
         assertEquals("skills", testApplicant.getSkills());
         assertEquals(4, testApplicant.getRating(), 1);
-        assertEquals("picture", testApplicant.getPicture());
+
         assertEquals("experience", testApplicant.getExperience());
 
     }
@@ -204,7 +203,6 @@ public class UserControllerTest {
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         // Act
         when(userService.findUserById(1)).thenReturn(createUser());
@@ -214,7 +212,6 @@ public class UserControllerTest {
         assertEquals(1, testApplicant.getId());
         assertEquals("skills", testApplicant.getSkills());
         assertEquals(4, testApplicant.getRating(), 1);
-        assertEquals("picture", testApplicant.getPicture());
         assertEquals("experience", testApplicant.getExperience());
 
     }
@@ -225,7 +222,6 @@ public class UserControllerTest {
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         when(userService.findUserById(1)).thenReturn(null);
         userController.createApplicant(applicant);

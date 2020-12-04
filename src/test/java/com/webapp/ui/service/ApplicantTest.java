@@ -27,7 +27,6 @@ public class ApplicantTest {
         Applicant testApplicant = applicantService.findApplicantById(12);
         assertEquals(12, testApplicant.getId());
         assertEquals("experience", testApplicant.getExperience());
-        assertEquals("picture", testApplicant.getPicture());
         assertEquals(4.5, testApplicant.getRating(), 1);
         assertEquals("skills", testApplicant.getSkills());
     }
@@ -59,7 +58,6 @@ public class ApplicantTest {
         Applicant applicant = new Applicant();
         applicant.setId(12);
         applicant.setExperience("experience");
-        applicant.setPicture("picture");
         applicant.setRating(4.5);
         applicant.setSkills("skills");
         return applicant;

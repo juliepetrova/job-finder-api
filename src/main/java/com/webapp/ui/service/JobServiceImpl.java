@@ -6,10 +6,12 @@ import com.webapp.ui.repository.JobRepository;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -55,5 +57,22 @@ public class JobServiceImpl implements JobService {
     @Override
     public void deleteJob(int id) {
         jobRepository.deleteById(id);
+    }
+
+    @Override
+    public long countAllJobs() {
+        return jobRepository.count();
+    }
+
+    @Override
+    public String getMostPopularCity() {
+        List<String> stats = jobRepository.getMostPopularCity();
+        return stats.get(0);
+    }
+
+    @Override
+    public String getTotalEarnings() {
+        int earnings = (int)jobRepository.totalEarnings();
+        return Integer.toString(earnings);
     }
 }

@@ -1,6 +1,7 @@
 package com.webapp.ui.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -34,7 +35,7 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
 
     @ManyToOne
     @JoinColumn(name="applicant_id", nullable=false)
-    @JsonBackReference
+    @JsonManagedReference
     private Applicant applicant;
 
     @Override

@@ -44,6 +44,11 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    public List<JobApplication> findByApplicantIdAndStatus(int userId, Status status) {
+        return jobApplicationRepository.findByApplicantIdAndStatus(userId, status);
+    }
+
+    @Override
     public void delete(int applicationId) {
         jobApplicationRepository.deleteById(applicationId);
     }

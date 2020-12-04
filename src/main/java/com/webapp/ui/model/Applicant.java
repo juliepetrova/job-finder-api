@@ -1,5 +1,6 @@
 package com.webapp.ui.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -12,13 +13,12 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     @Id
     @Column(name = "id")
     private int id;
-    private String picture;
     private String skills;
     private String experience;
     private double rating;
 
 //    @OneToOne
-//    @MapsId
+//    @MapsId()
 //    private User user;
 
     public List<JobApplication> getJobApplications() {
@@ -30,7 +30,7 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     }
 
     @OneToMany(mappedBy="applicant", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonBackReference
     private List<JobApplication> jobApplications;
 
     @Override
@@ -41,13 +41,6 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     @Override
     public void setId(int id) {
         this.id = id;
-    }
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
     }
 
     public String getSkills() {

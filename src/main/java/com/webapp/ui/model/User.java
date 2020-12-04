@@ -23,6 +23,7 @@ public class User implements com.webapp.ui.model.base.Entity {
     private String city;
     private String country;
     private String phone_number;
+    private String image;
 
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -131,4 +132,13 @@ public class User implements com.webapp.ui.model.base.Entity {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

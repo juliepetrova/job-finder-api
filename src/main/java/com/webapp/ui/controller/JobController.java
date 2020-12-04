@@ -14,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -75,6 +72,15 @@ public class JobController {
     public User getUserByJob(@PathVariable int jobId){
         Job job = jobService.findJobById(jobId);
         return job.getUser();
+    }
+
+    @GetMapping(path = "/statistics")
+    public Map<String, String> getAllJobsStats(){
+        Map<String, String> stats = new Hashtable<>();
+        stats.put("allJobs", Long.toString(jobService.countAllJobs()));
+        stats.put("mostPopularCity", jobService.getMostPopularCity());
+        stats.put("totalEarnings", jobService.getTotalEarnings());
+        return stats;
     }
 
     @PostMapping

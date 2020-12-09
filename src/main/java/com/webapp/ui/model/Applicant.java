@@ -16,10 +16,9 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     private String skills;
     private String experience;
     private double rating;
+    private int numRatings;
 
-//    @OneToOne
-//    @MapsId()
-//    private User user;
+
 
     public List<JobApplication> getJobApplications() {
         return jobApplications;
@@ -30,7 +29,7 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     }
 
     @OneToMany(mappedBy="applicant", fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonManagedReference
     private List<JobApplication> jobApplications;
 
     @Override
@@ -67,5 +66,11 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
         this.rating = rating;
     }
 
+    public int getNumRatings() {
+        return numRatings;
+    }
 
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
+    }
 }

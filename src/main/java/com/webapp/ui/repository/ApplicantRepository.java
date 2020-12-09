@@ -10,5 +10,7 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
 
     Applicant findById(int id);
 
+//    Applicant findByJobApplicationId(int id);
+
     Applicant save(Applicant applicant);
 }

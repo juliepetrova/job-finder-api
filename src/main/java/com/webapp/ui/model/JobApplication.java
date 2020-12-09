@@ -1,6 +1,7 @@
 package com.webapp.ui.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -13,7 +14,6 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-//    private int status_id;
     private String description;
     private String date;
 
@@ -35,7 +35,8 @@ public class JobApplication implements com.webapp.ui.model.base.Entity{
 
     @ManyToOne
     @JoinColumn(name="applicant_id", nullable=false)
-    @JsonManagedReference
+//    @JsonBackReference
+    @JsonIgnoreProperties({"jobApplications" })
     private Applicant applicant;
 
     @Override

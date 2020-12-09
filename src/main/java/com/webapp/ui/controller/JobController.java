@@ -43,6 +43,7 @@ public class JobController {
                 filteredJobs = jobService.findJobsByStatus(status, paging);
             }
             else {
+//                Also add status
                 filteredJobs = jobService.findJobsByCity(city, paging);
             }
             jobs = filteredJobs.getContent();

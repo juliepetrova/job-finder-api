@@ -181,9 +181,21 @@ public class UserController {
 
     @PutMapping (path = "/applicant")
     public Applicant updateApplicant(@RequestBody Applicant applicant) throws NotFoundException {
-        Applicant found = applicantService.updateApplicant(applicant);
+        Applicant found = applicantService.findApplicantById(applicant.getId());
         if(found != null) {
-            return found;
+            return applicantService.updateApplicant(applicant);
+        }else{
+            throw new NotFoundException("Applicant with this id was not found!");
+        }
+    }
+
+    @PutMapping (path = "/applicant/{applicantId}/{rating}")
+    public void updateRating(@PathVariable int applicantId, int rating) throws NotFoundException {
+        Applicant found = applicantService.findApplicantById(applicantId);
+        if(found != null) {
+            found.setNumRatings(found.getNumRatings() + 1);
+            found.setRating((found.getRating() + rating)/found.getNumRatings());
+            applicantService.updateApplicant(found);
         }else{
             throw new NotFoundException("Applicant with this id was not found!");
         }

@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.ServletException;
 import java.util.*;
 
@@ -190,7 +191,7 @@ public class UserController {
     }
 
     @PutMapping (path = "/applicant/{applicantId}/{rating}")
-    public void updateRating(@PathVariable int applicantId, int rating) throws NotFoundException {
+    public void updateRating(@PathVariable int applicantId, @PathVariable Integer rating) throws NotFoundException {
         Applicant found = applicantService.findApplicantById(applicantId);
         if(found != null) {
             found.setNumRatings(found.getNumRatings() + 1);

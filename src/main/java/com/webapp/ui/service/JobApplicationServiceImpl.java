@@ -2,9 +2,13 @@ package com.webapp.ui.service;
 
 import com.webapp.ui.model.JobApplication;
 import com.webapp.ui.model.Status;
+import com.webapp.ui.model.User;
 import com.webapp.ui.repository.JobApplicationRepository;
 import com.webapp.ui.service.base.JobApplicationService;
+import com.webapp.ui.service.base.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +55,35 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     @Override
     public void delete(int applicationId) {
         jobApplicationRepository.deleteById(applicationId);
+    }
+
+    @Autowired
+    UserService us;
+
+    public void changeStatus(int applicationId, int statusId){
+        JobApplication jobApplication = findJobApplicationById(applicationId);
+        Status status = new Status(statusId, "");
+        jobApplication.setStatus(status);
+        if(statusId == 3){
+            User user = us.findUserById(jobApplication.getApplicant().getId());
+            String message = "Hello " + user.getFirst_name() + ", \n You have been accepted for job " + jobApplication.getJob().getTitle() + " at " + jobApplication.getJob().getDate();
+            sendEmail(user.getEmail(), message);
+        }
+        saveJobApplication(jobApplication);
+    }
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    void sendEmail(String email, String message) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+
+        msg.setSubject("You have been accepted for a job!");
+        msg.setText(message);
+
+        javaMailSender.send(msg);
+
     }
 }

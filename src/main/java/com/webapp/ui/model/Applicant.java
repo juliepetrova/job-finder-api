@@ -29,7 +29,7 @@ public class Applicant implements com.webapp.ui.model.base.Entity{
     }
 
     @OneToMany(mappedBy="applicant", fetch = FetchType.EAGER)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<JobApplication> jobApplications;
 
     @Override

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Dictionary;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -37,8 +34,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Page<Job> findJobsByCity(String city, Pageable pageable) {
-        return jobRepository.findByCity(city, pageable);
+    public Page<Job> findJobsByCity(String city, Status status, Pageable pageable) {
+        return jobRepository.findByCityAndStatus(city,status, pageable);
     }
 
     @Override

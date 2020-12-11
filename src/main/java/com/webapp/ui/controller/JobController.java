@@ -38,13 +38,13 @@ public class JobController {
             Pageable paging = PageRequest.of(page, size);
 
             Page<Job> filteredJobs;
+            Status status = new Status(1, "Available");
             if (city == null) {
-                Status status = new Status(1, "Available");
                 filteredJobs = jobService.findJobsByStatus(status, paging);
             }
             else {
 //                Also add status
-                filteredJobs = jobService.findJobsByCity(city, paging);
+                filteredJobs = jobService.findJobsByCity(city, status, paging);
             }
             jobs = filteredJobs.getContent();
             Map<String, Object> response = new HashMap<>();

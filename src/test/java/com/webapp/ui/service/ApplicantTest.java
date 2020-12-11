@@ -53,6 +53,22 @@ public class ApplicantTest {
         applicantService.createApplicant(new Applicant());
     }
 
+    @Test
+    public void testUpdateApplicant() {
+        // Arrange
+        Applicant applicant = createApplicant();
+        // Act
+        when(applicantRepository.save(applicant)).thenReturn(applicant);
+        Applicant test = applicantService.updateApplicant(applicant);
+        // Assert
+        assertEquals(applicant.getId(), test.getId());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testUpdateNullApplicant() {
+        applicantService.updateApplicant(new Applicant());
+    }
+
 
     public Applicant createApplicant() {
         Applicant applicant = new Applicant();

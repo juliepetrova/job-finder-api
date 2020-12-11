@@ -54,11 +54,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void updateRating(int user_id, double rating) {
-//        Should be moved into Applicant
-    }
-
-    @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

@@ -14,7 +14,7 @@ public interface JobService {
     List<Job> findAllAvailableJobs();
     Job findJobById(int id);
     List<Job> findJobsByUserId(int userId);
-    Page<Job> findJobsByCity(String city, Pageable pageable);
+    Page<Job> findJobsByCity(String city, Status status, Pageable pageable);
     Page<Job> findJobsByStatus(Status status, Pageable pageable);
     Job createJob(Job job);
     void deleteJob(int id);

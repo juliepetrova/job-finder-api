@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     List<Job> findByUser(int id);
     List<Job> findAll();
     Page<Job> findByStatus(Status status, Pageable pageable);
-    Page<Job> findByCity(String city, Pageable pageable);
+    Page<Job> findByCityAndStatus(String city, Status status, Pageable pageable);
     long count();
     void deleteById(int id);
 

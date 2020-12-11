@@ -28,6 +28,9 @@ public class ApplicantServiceImpl implements ApplicantService {
 
     @Override
     public Applicant updateApplicant(Applicant applicant) {
+        if(applicant == null || applicant.getId() == 0){
+            throw new NullPointerException();
+        }
         return applicantRepository.save(applicant);
     }
 }

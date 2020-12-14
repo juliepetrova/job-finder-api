@@ -24,11 +24,7 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-//    @GetMapping
-//    public List<Job> getAvailableJobs() {
-//        Status status = new Status(1, "Available");
-//        return jobService.findJobsByStatus(status);
-//    }
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> getByCity(@RequestParam(required = false) String city,
                                                @RequestParam(defaultValue = "0") int page,
@@ -76,7 +72,7 @@ public class JobController {
     }
 
     @GetMapping(path = "/statistics")
-    public Map<String, String> getAllJobsStats(){
+    public Map<String, String> getAllJobsStatistics(){
         Map<String, String> stats = new Hashtable<>();
         stats.put("allJobs", Long.toString(jobService.countAllJobs()));
         stats.put("mostPopularCity", jobService.getMostPopularCity());

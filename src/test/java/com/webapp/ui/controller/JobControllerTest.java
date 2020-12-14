@@ -10,9 +10,17 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -26,27 +34,7 @@ public class JobControllerTest {
     
     @InjectMocks
     JobController jobController;
-    
-//    @Test
-//    public void testGetJobs(){
-//        List<Job> jobs = new ArrayList<>();
-//        jobs.add(createJob());
-//        jobs.add(createJob());
-//        jobs.add(createJob());
-//        jobs.add(createJob());
-//        when(jobService.findAllAvailableJobs()).thenReturn(jobs);
-//        List<Job> testJobs = jobController.getByCity("Ein");
-//        assertEquals(jobs.size(), testJobs.size());
-//    }
-    
-//    @Test
-//    public void testGetJobsNoRecords(){
-//        List<Job> jobs = new ArrayList<>();
-//        when(jobService.findAllAvailableJobs()).thenReturn(jobs);
-//        List<Job> testJobs = jobController.getAvailableJobs();
-//        assertEquals(0, testJobs.size());
-//    }
-    
+
     @Test 
     public void testGetJobById() throws NotFoundException {
         // Arrange
@@ -123,6 +111,43 @@ public class JobControllerTest {
         Job job = createJob();
         when(jobService.findJobById(1)).thenReturn(null);
         jobController.updateJob(job);
+    }
+
+    @Test
+    public void testGetAllJobsStatistics() {
+        // Arrange
+        Map<String, String> stats = new Hashtable<>();
+        stats.put("allJobs", "12");
+        stats.put("mostPopularCity", "Eindhoven");
+        stats.put("totalEarnings", "120");
+        // Act
+        when(jobService.countAllJobs()).thenReturn(Long.valueOf("12"));
+        when(jobService.getMostPopularCity()).thenReturn("Eindhoven");
+        when(jobService.getTotalEarnings()).thenReturn("120");
+        Map<String, String> results = jobController.getAllJobsStatistics();
+        // Assert
+        assertEquals(stats.size(), results.size());
+        assertEquals(stats.containsValue("120"), results.containsValue("120"));
+        assertEquals(stats.containsValue("Eindhoven"), results.containsValue("Eindhoven"));
+        assertEquals(stats.containsValue("12"), results.containsValue("12"));
+    }
+
+    @Test
+    public void testChangeStatus() {
+        // Arrange
+        Job job = createJob();
+        // Act
+        when(jobService.findJobById(1)).thenReturn(job);
+        when(jobService.createJob(job)).thenReturn(job);
+        jobController.changeStatus(1, 2);
+    }
+
+    @Test
+    public void testDeleteJob(){
+        // Arrange
+        int jobId = 1;
+        // Act
+        jobController.deleteJob(jobId);
     }
 
     public Job createJob(){

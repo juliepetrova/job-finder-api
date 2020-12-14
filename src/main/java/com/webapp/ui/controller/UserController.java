@@ -1,13 +1,11 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.*;
-import com.webapp.ui.service.UserServiceImpl;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
 import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.PermitAll;
-import javax.servlet.ServletException;
 import java.util.*;
 
 @RestController
@@ -62,17 +56,11 @@ public class UserController {
         catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
         }
-
-
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
-
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
         UserDetailsAuth userDetailsAuth = (UserDetailsAuth) userDetails;
-
         return ResponseEntity.ok(new AuthenticationResponse(jwt,
                 userDetailsAuth.getUser()));
     }
@@ -80,8 +68,6 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-//            @RequestParam(value="page", defaultValue = "1") int page,
-//            @RequestParam(value="limit", defaultValue = "50") int limit,
         return userService.findAllUsers();
     }
 
@@ -96,12 +82,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) throws NotFoundException {
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-            throw new NotFoundException("User with the provided id not found");
+            return new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -22,6 +23,8 @@ public class UserController {
 
     Map<Integer, User> users;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     UserService userService;
     @Autowired
@@ -40,6 +43,7 @@ public class UserController {
         if(userService.checkIfEmailExists(user.getEmail()) || userService.checkIfUsernameExists(user.getUsername())){
             return new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
         }else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return ResponseEntity.ok(userService.saveUserDetails(user));
         }
     }

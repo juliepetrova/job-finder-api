@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Dictionary;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {

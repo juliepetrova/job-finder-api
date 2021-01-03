@@ -69,13 +69,16 @@ public class JobApplicationController {
         return String.valueOf(jobApplication.getApplicant().getId());
     }
 
+    @GetMapping (path = "/statistics/{userId}")
+        public List<JobApplication> getStatistics(@PathVariable int userId){
+        Status status = new Status(3, "Completed");
+        return jobApplicationService.findByApplicantIdAndStatus(userId, status);
+    }
+
 
     @PutMapping (path = "/updateStatus/{applicationId}/{statusId}")
     public void changeStatus(@PathVariable int applicationId, @PathVariable int statusId){
-        JobApplication jobApplication = jobApplicationService.findJobApplicationById(applicationId);
-        Status status = new Status(statusId, "");
-        jobApplication.setStatus(status);
-        jobApplicationService.saveJobApplication(jobApplication);
+        jobApplicationService.changeStatus(applicationId,statusId);
     }
 
 

@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -81,17 +82,18 @@ public class JobServiceTests {
     }
 
     @Test
-    public void testGetJobsByCity(){
+    public void testGetJobsByCityAndStatus(){
         // Arrange
         List<Job> jobs = new ArrayList<>();
         jobs.add(createJob());
         jobs.add(createJob());
         jobs.add(createJob());
         Page<Job> page = new PageImpl<>(jobs);
+        Status status = new Status();
         // Act
         Pageable firstPage = (Pageable) PageRequest.of(0, 10);
-        when(jobRepository.findByCity("city", firstPage)).thenReturn(page);
-        Page<Job> testJobs = jobService.findJobsByCity("city", firstPage);
+        when(jobRepository.findByCityAndStatus("city",status, firstPage)).thenReturn(page);
+        Page<Job> testJobs = jobService.findJobsByCity("city", status, firstPage);
         // Assert
         assertEquals(page, testJobs);
     }
@@ -101,13 +103,78 @@ public class JobServiceTests {
         // Arrange
         List<Job> jobs = new ArrayList<>();
         Page<Job> page = new PageImpl<>(jobs);
+        Status status = new Status();
         // Act
         Pageable firstPage = (Pageable) PageRequest.of(0, 10);
-        when(jobRepository.findByCity("city", firstPage)).thenReturn((page));
-        Page<Job> testJobs =jobService.findJobsByCity("city", firstPage);
+        when(jobRepository.findByCityAndStatus("city", status, firstPage)).thenReturn((page));
+        Page<Job> testJobs =jobService.findJobsByCity("city", status, firstPage);
         // Assert
         assertEquals(page, testJobs);
 
+    }
+
+    @Test
+    public void testGetJobsByStatus(){
+        // Arrange
+        List<Job> jobs = new ArrayList<>();
+        jobs.add(createJob());
+        jobs.add(createJob());
+        jobs.add(createJob());
+        Page<Job> page = new PageImpl<>(jobs);
+        Status status = new Status();
+        // Act
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByStatus(status, firstPage)).thenReturn(page);
+        Page<Job> testJobs = jobService.findJobsByStatus(status, firstPage);
+        // Assert
+        assertEquals(page, testJobs);
+    }
+
+    @Test
+    public void testGetJobsByNullStatus(){
+        // Arrange
+        List<Job> jobs = new ArrayList<>();
+        Page<Job> page = new PageImpl<>(jobs);
+        Status status = new Status();
+        // Act
+        Pageable firstPage = (Pageable) PageRequest.of(0, 10);
+        when(jobRepository.findByStatus(status, firstPage)).thenReturn((page));
+        Page<Job> testJobs =jobService.findJobsByStatus(status, firstPage);
+        // Assert
+        assertEquals(page, testJobs);
+    }
+
+    @Test
+    public void testCountAllJobs(){
+        //Arrange
+        long number = 3;
+        //Act
+        when(jobRepository.count()).thenReturn(number);
+        long result = jobService.countAllJobs();
+        //Assert
+        assertEquals(number, result);
+    }
+
+    @Test
+    public void testGetMostPopularCity(){
+        //Arrange
+        String popularCity = "Eindhoven";
+        //Act
+        when(jobRepository.getMostPopularCity()).thenReturn(Collections.singletonList(popularCity));
+        String city = jobService.getMostPopularCity();
+        //Assert
+        assertEquals(popularCity, city);
+    }
+
+    @Test
+    public void testGetTotalEarnings(){
+        //Arrange
+        int earnings = 123;
+        //Act
+        when(jobRepository.totalEarnings()).thenReturn((double) earnings);
+        String total = jobService.getTotalEarnings();
+        //Assert
+        assertEquals(Integer.toString(earnings), total);
     }
 
     @Test

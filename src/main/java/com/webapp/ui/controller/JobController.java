@@ -14,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -27,11 +24,7 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-//    @GetMapping
-//    public List<Job> getAvailableJobs() {
-//        Status status = new Status(1, "Available");
-//        return jobService.findJobsByStatus(status);
-//    }
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> getByCity(@RequestParam(required = false) String city,
                                                @RequestParam(defaultValue = "0") int page,
@@ -41,12 +34,13 @@ public class JobController {
             Pageable paging = PageRequest.of(page, size);
 
             Page<Job> filteredJobs;
+            Status status = new Status(1, "Available");
             if (city == null) {
-                Status status = new Status(1, "Available");
                 filteredJobs = jobService.findJobsByStatus(status, paging);
             }
             else {
-                filteredJobs = jobService.findJobsByCity(city, paging);
+//                Also add status
+                filteredJobs = jobService.findJobsByCity(city, status, paging);
             }
             jobs = filteredJobs.getContent();
             Map<String, Object> response = new HashMap<>();
@@ -75,6 +69,15 @@ public class JobController {
     public User getUserByJob(@PathVariable int jobId){
         Job job = jobService.findJobById(jobId);
         return job.getUser();
+    }
+
+    @GetMapping(path = "/statistics")
+    public Map<String, String> getAllJobsStatistics(){
+        Map<String, String> stats = new Hashtable<>();
+        stats.put("allJobs", Long.toString(jobService.countAllJobs()));
+        stats.put("mostPopularCity", jobService.getMostPopularCity());
+        stats.put("totalEarnings", jobService.getTotalEarnings());
+        return stats;
     }
 
     @PostMapping

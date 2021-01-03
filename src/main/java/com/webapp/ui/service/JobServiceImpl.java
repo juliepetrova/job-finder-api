@@ -6,7 +6,6 @@ import com.webapp.ui.repository.JobRepository;
 import com.webapp.ui.service.base.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -35,8 +34,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Page<Job> findJobsByCity(String city, Pageable pageable) {
-        return jobRepository.findByCity(city, pageable);
+    public Page<Job> findJobsByCity(String city, Status status, Pageable pageable) {
+        return jobRepository.findByCityAndStatus(city,status, pageable);
     }
 
     @Override
@@ -55,5 +54,22 @@ public class JobServiceImpl implements JobService {
     @Override
     public void deleteJob(int id) {
         jobRepository.deleteById(id);
+    }
+
+    @Override
+    public long countAllJobs() {
+        return jobRepository.count();
+    }
+
+    @Override
+    public String getMostPopularCity() {
+        List<String> stats = jobRepository.getMostPopularCity();
+        return stats.get(0);
+    }
+
+    @Override
+    public String getTotalEarnings() {
+        int earnings = (int)jobRepository.totalEarnings();
+        return Integer.toString(earnings);
     }
 }

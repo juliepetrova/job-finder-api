@@ -15,5 +15,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     List<JobApplication> findByApplicantId(int userId);
     List<JobApplication> findJobApplicationByJobId(int jobId);
     List<JobApplication> findByStatus(Status status);
+    List<JobApplication> findByApplicantIdAndStatus(int userId, Status status);
     void deleteById(int applicationId);
 }

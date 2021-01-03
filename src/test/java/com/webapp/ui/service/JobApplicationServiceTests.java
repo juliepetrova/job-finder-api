@@ -69,6 +69,63 @@ public class JobApplicationServiceTests {
     }
 
     @Test
+    public void testFindJobApplicationsByJob(){
+        // Arrange
+        List<JobApplication> jobApplications = new ArrayList<>();
+        // Act
+        when(jobApplicationRepository.findJobApplicationByJobId(1)).thenReturn(jobApplications);
+        List<JobApplication> testJobApplications = jobApplicationService.findJobApplicationByJobId(1);
+        // Assert
+        assertEquals(new ArrayList<>(), testJobApplications);
+        assertEquals((new ArrayList<>()).size(), testJobApplications.size());
+    }
+
+    @Test
+    public void testFindJobApplicationsByWrongJobId(){
+        when(jobApplicationRepository.findJobApplicationByJobId(1)).thenReturn(null);
+        List<JobApplication> testJobApplications = jobApplicationService.findJobApplicationByJobId(1);
+        assertNull(testJobApplications);
+    }
+
+    @Test
+    public void testFindJobApplicationsByStatus(){
+        // Arrange
+        List<JobApplication> jobApplications = new ArrayList<>();
+        // Act
+//        when(jobApplicationRepository.findByStatus(new Status())).thenReturn(jobApplications);
+        List<JobApplication> testJobApplications = jobApplicationService.findJobApplicationsByStatus(new Status());
+        // Assert
+        assertEquals(new ArrayList<>(), testJobApplications);
+        assertEquals((new ArrayList<>()).size(), testJobApplications.size());
+    }
+
+    @Test
+    public void testFindJobApplicationsByNullStatus(){
+//        when(jobApplicationRepository.findByStatus(new Status())).thenReturn(null);
+        List<JobApplication> testJobApplications = jobApplicationService.findJobApplicationsByStatus(new Status());
+        assertEquals(new ArrayList<>(), testJobApplications);
+    }
+
+    @Test
+    public void testFindJobApplicationsByApplicantIdAndStatus(){
+        // Arrange
+        List<JobApplication> jobApplications = new ArrayList<>();
+        // Act
+//        when(jobApplicationRepository.findByApplicantIdAndStatus(1, new Status())).thenReturn(jobApplications);
+        List<JobApplication> testJobApplications = jobApplicationService.findByApplicantIdAndStatus(1, new Status());
+        // Assert
+        assertEquals(new ArrayList<>(), testJobApplications);
+        assertEquals((new ArrayList<>()).size(), testJobApplications.size());
+    }
+
+    @Test
+    public void testFindJobApplicationsByNullApplicantIdOrStatus(){
+//        when(jobApplicationRepository.findByApplicantIdAndStatus(1, new Status())).thenReturn(null);
+        List<JobApplication> testJobApplications = jobApplicationService.findByApplicantIdAndStatus(1, new Status());
+        assertEquals(new ArrayList<>(), testJobApplications);
+    }
+
+    @Test
     public void testSaveJobApplication(){
         // Arrange
         JobApplication jobApplication = createJobApplication();

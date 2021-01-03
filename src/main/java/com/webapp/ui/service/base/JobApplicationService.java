@@ -16,5 +16,9 @@ public interface JobApplicationService {
 
     List<JobApplication> findJobApplicationsByStatus(Status status);
 
+    List<JobApplication> findByApplicantIdAndStatus(int userId, Status status);
+
+    void changeStatus(int applicationId, int statusId);
+
     void delete(int applicationId);
 }

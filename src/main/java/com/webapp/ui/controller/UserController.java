@@ -1,13 +1,11 @@
 package com.webapp.ui.controller;
 
 import com.webapp.ui.model.*;
-import com.webapp.ui.service.UserServiceImpl;
 import com.webapp.ui.service.base.ApplicantService;
 import com.webapp.ui.service.base.UserService;
 import com.webapp.ui.util.JwtUtil;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletException;
 import java.util.*;
 
 @RestController
@@ -27,6 +23,8 @@ public class UserController {
 
     Map<Integer, User> users;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     UserService userService;
     @Autowired
@@ -45,6 +43,7 @@ public class UserController {
         if(userService.checkIfEmailExists(user.getEmail()) || userService.checkIfUsernameExists(user.getUsername())){
             return new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
         }else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return ResponseEntity.ok(userService.saveUserDetails(user));
         }
     }
@@ -61,17 +60,11 @@ public class UserController {
         catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
         }
-
-
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
-
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
         UserDetailsAuth userDetailsAuth = (UserDetailsAuth) userDetails;
-
         return ResponseEntity.ok(new AuthenticationResponse(jwt,
                 userDetailsAuth.getUser()));
     }
@@ -79,8 +72,6 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-//            @RequestParam(value="page", defaultValue = "1") int page,
-//            @RequestParam(value="limit", defaultValue = "50") int limit,
         return userService.findAllUsers();
     }
 
@@ -95,12 +86,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/username/{username}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username) throws NotFoundException {
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-            throw new NotFoundException("User with the provided id not found");
+            return new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -181,9 +172,21 @@ public class UserController {
 
     @PutMapping (path = "/applicant")
     public Applicant updateApplicant(@RequestBody Applicant applicant) throws NotFoundException {
-        Applicant found = applicantService.updateApplicant(applicant);
+        Applicant found = applicantService.findApplicantById(applicant.getId());
         if(found != null) {
-            return found;
+            return applicantService.updateApplicant(applicant);
+        }else{
+            throw new NotFoundException("Applicant with this id was not found!");
+        }
+    }
+
+    @PutMapping (path = "/applicant/{applicantId}/{rating}")
+    public void updateRating(@PathVariable int applicantId, @PathVariable Integer rating) throws NotFoundException {
+        Applicant found = applicantService.findApplicantById(applicantId);
+        if(found != null) {
+            found.setNumRatings(found.getNumRatings() + 1);
+            found.setRating((found.getRating() + rating)/found.getNumRatings());
+            applicantService.updateApplicant(found);
         }else{
             throw new NotFoundException("Applicant with this id was not found!");
         }

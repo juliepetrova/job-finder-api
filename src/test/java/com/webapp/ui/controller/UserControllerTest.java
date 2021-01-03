@@ -14,8 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -150,9 +153,86 @@ public class UserControllerTest {
         // Arrange
         User user = createUser();
         // Act (expect exception)
-//        when(userService.saveUserDetails(user)).thenReturn(null);
         user.setId(211);
         userController.updateUser(user);
+    }
+
+    @Test
+    public void testDeleteUser(){
+        // Arrange
+        int userId = 1;
+        // Act
+        userController.deleteUser(userId);
+    }
+
+//    @Test
+//    public void testRegister() {
+//        // Arrange
+//        User user = createUser();
+//        // Act
+//        when(userService.checkIfUsernameExists(user.getUsername())).thenReturn(false);
+//        when(userService.checkIfEmailExists(user.getEmail())).thenReturn(false);
+//        when(userService.saveUserDetails(user)).thenReturn(user);
+//        ResponseEntity testUser = userController.registerUser(user);
+//        // Assert
+//        assertEquals(ResponseEntity.ok(user), testUser);
+//    }
+
+    @Test
+    public void testRegisterDuplicatedEmail() {
+        // Arrange
+        User user = createUser();
+        ResponseEntity re = new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
+        // Act
+        when(userService.checkIfUsernameExists(user.getUsername())).thenReturn(true);
+        ResponseEntity testUser = userController.registerUser(user);
+        // Assert
+        assertEquals(re, testUser);
+    }
+
+    @Test
+    public void testGetUserByUsername() {
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
+        ResponseEntity testUser = userController.getUserByUsername(user.getUsername());
+        // Assert
+        assertEquals(ResponseEntity.ok(user), testUser);
+    }
+
+    @Test
+    public void testGetUserByUsernameNotExisting() {
+        // Arrange
+        User user = createUser();
+        ResponseEntity re = new ResponseEntity(null, HttpStatus.UNPROCESSABLE_ENTITY);
+        // Act
+        when(userService.findByUsername(user.getUsername())).thenReturn(null);
+        ResponseEntity testUser = userController.getUserByUsername(user.getUsername());
+        // Assert
+        assertEquals(re, testUser);
+    }
+
+    @Test
+    public void testGetPastJobs() {
+        // Arrange
+        User user = createUser();
+        List<Job> jobs = new ArrayList<>();
+        user.setJobs(jobs);
+        // Act
+        when(userService.findUserById(1)).thenReturn(user);
+        List<Job> testJobs = userController.getPastJobsByUser(1);
+        // Assert
+        assertEquals(0, testJobs.size());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetPastJobsNull() {
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userService.findUserById(1)).thenReturn(user);
+        List<Job> testJobs = userController.getPastJobsByUser(1);
     }
 
     public User createUser() {
@@ -177,7 +257,6 @@ public class UserControllerTest {
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         // Act
         when(applicantService.findApplicantById(1)).thenReturn(applicant);
@@ -186,7 +265,7 @@ public class UserControllerTest {
         assertEquals(1, testApplicant.getId());
         assertEquals("skills", testApplicant.getSkills());
         assertEquals(4, testApplicant.getRating(), 1);
-        assertEquals("picture", testApplicant.getPicture());
+
         assertEquals("experience", testApplicant.getExperience());
 
     }
@@ -204,7 +283,6 @@ public class UserControllerTest {
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         // Act
         when(userService.findUserById(1)).thenReturn(createUser());
@@ -214,22 +292,74 @@ public class UserControllerTest {
         assertEquals(1, testApplicant.getId());
         assertEquals("skills", testApplicant.getSkills());
         assertEquals(4, testApplicant.getRating(), 1);
-        assertEquals("picture", testApplicant.getPicture());
         assertEquals("experience", testApplicant.getExperience());
 
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = NotFoundException.class)
     public void testCreateApplicantIncorrectInput() throws Exception {
         Applicant applicant = new Applicant();
         applicant.setId(1);
         applicant.setSkills("skills");
         applicant.setRating(4);
-        applicant.setPicture("picture");
         applicant.setExperience("experience");
         when(userService.findUserById(1)).thenReturn(null);
         userController.createApplicant(applicant);
     }
 
+    @Test(expected = InputMismatchException.class)
+    public void testCreateApplicantNegativeId() throws Exception {
+        Applicant applicant = new Applicant();
+        userController.createApplicant(applicant);
+    }
 
+    @Test
+    public void testUpdateApplicant() throws NotFoundException {
+        // Arrange
+        Applicant applicant = new Applicant();
+        applicant.setId(1);
+        applicant.setSkills("skills");
+        applicant.setRating(4);
+        applicant.setExperience("experience");
+        // Act
+        when(applicantService.findApplicantById(1)).thenReturn(applicant);
+        when(applicantService.updateApplicant(applicant)).thenReturn(applicant);
+        Applicant testApplicant = userController.updateApplicant(applicant);
+        // Assert
+        assertEquals(1, testApplicant.getId());
+        assertEquals("skills", testApplicant.getSkills());
+        assertEquals(4, testApplicant.getRating(), 1);
+        assertEquals("experience", testApplicant.getExperience());
+    }
+
+    @Test (expected = NotFoundException.class)
+    public void testUpdateApplicantNotFound() throws NotFoundException {
+        // Arrange
+        Applicant applicant = new Applicant();
+        applicant.setId(1);
+        // Act
+        when(applicantService.findApplicantById(1)).thenReturn(null);
+        Applicant testApplicant = userController.updateApplicant(applicant);
+    }
+
+    @Test
+    public void testUpdateRating() throws NotFoundException {
+        // Arrange
+        Applicant applicant = new Applicant();
+        applicant.setId(1);
+        // Act
+        when(applicantService.findApplicantById(1)).thenReturn(applicant);
+        when(applicantService.updateApplicant(applicant)).thenReturn(applicant);
+        userController.updateRating(1, 10);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testUpdateRatingUserNotFound() throws NotFoundException {
+        // Arrange
+        Applicant applicant = new Applicant();
+        applicant.setId(1);
+        // Act
+        when(applicantService.findApplicantById(1)).thenReturn(null);
+        userController.updateRating(1, 10);
+    }
 }

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +150,101 @@ public class UserServiceTests {
         userService.saveUserDetails(user);
     }
 
+    @Test
+    public void testUpdateUser() {
+        // Arrange
+        User u = createUser();
+        // Act
+        when(userRepository.save(u)).thenReturn(u);
+        User testUser = userService.updateUser(u);
+        // Assert
+        assertEquals(1, testUser.getId());
+        assertEquals("first", testUser.getFirst_name());
+        assertEquals("last", testUser.getLast_name());
+        assertEquals("1234", testUser.getPhone_number());
+        assertEquals("12.12.2000", testUser.getDate_of_birth());
+        assertEquals("Austria", testUser.getCountry());
+        assertEquals("Vienna", testUser.getCity());
+    }
+
+    @Test
+    public void testFindByUsername(){
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userRepository.findByUsername("username")).thenReturn(user);
+        User testUser = userService.findByUsername("username");
+        // Assert
+        assertEquals(1, testUser.getId());
+        assertEquals("first", testUser.getFirst_name());
+        assertEquals("last", testUser.getLast_name());
+        assertEquals("1234", testUser.getPhone_number());
+        assertEquals("12.12.2000", testUser.getDate_of_birth());
+        assertEquals("Austria", testUser.getCountry());
+        assertEquals("Vienna", testUser.getCity());
+    }
+
+    @Test
+    public void testFindByUsernameDoesNotExist() {
+        // Arrange
+        User user = null;
+        // Act
+        when(userRepository.findByUsername("username")).thenReturn(user);
+        User testUser = userService.findByUsername("username");
+        // Assert
+        assertEquals(null, testUser);
+    }
+
+    @Test
+    public void testCheckIfUsernameExists() {
+        // Act
+        when(userRepository.existsUserByUsername("username")).thenReturn(true);
+        boolean testUser = userService.checkIfUsernameExists("username");
+        // Assert
+        assertEquals(true, testUser);
+    }
+
+    @Test
+    public void testCheckIfUsernameDoesNotExist() {
+        // Act
+        when(userRepository.existsUserByUsername("username")).thenReturn(false);
+        boolean testUser = userService.checkIfUsernameExists("username");
+        // Assert
+        assertEquals(false, testUser);
+    }
+    @Test
+    public void testCheckIfEmailExists() {
+        // Act
+        when(userRepository.existsUserByEmail("email@email.com")).thenReturn(true);
+        boolean testUser = userService.checkIfEmailExists("email@email.com");
+        // Assert
+        assertEquals(true, testUser);
+    }
+
+    @Test
+    public void testCheckIfEmailDoesNotExist() {
+        // Act
+        when(userRepository.existsUserByEmail("email@email.com")).thenReturn(false);
+        boolean testUser = userService.checkIfEmailExists("email@email.com");
+        // Assert
+        assertEquals(false, testUser);
+    }
+
+    @Test
+    public void testLoadUserByUsername() {
+        // Arrange
+        User user = createUser();
+        // Act
+        when(userRepository.findByUsername("username")).thenReturn(user);
+        UserDetails testUser = userService.loadUserByUsername("username");
+        // Assert
+        assertEquals("username", testUser.getUsername());
+        assertEquals("password", testUser.getPassword());
+    }
+
+
+
+
     public User createUser(){
         User user = new User();
         user.setId(1);
@@ -160,6 +256,7 @@ public class UserServiceTests {
         user.setDate_of_birth("12.12.2000");
         user.setCountry("Austria");
         user.setCity("Vienna");
+        user.setPassword("password");
         return user;
     }
 

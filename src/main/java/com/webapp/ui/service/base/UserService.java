@@ -12,7 +12,6 @@ public interface UserService {
     User findUserByEmail(String email);
     User saveUserDetails(User user);
     User updateUser(User user);
-    void updateRating(int userId, double rating);
     void deleteUser(int userId);
     UserDetails loadUserByUsername(String username);
     boolean checkIfUsernameExists(String username);

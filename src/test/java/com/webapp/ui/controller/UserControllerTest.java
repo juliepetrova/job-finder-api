@@ -165,18 +165,18 @@ public class UserControllerTest {
         userController.deleteUser(userId);
     }
 
-    @Test
-    public void testRegister() {
-        // Arrange
-        User user = createUser();
-        // Act
-        when(userService.checkIfUsernameExists(user.getUsername())).thenReturn(false);
-        when(userService.checkIfEmailExists(user.getEmail())).thenReturn(false);
-        when(userService.saveUserDetails(user)).thenReturn(user);
-        ResponseEntity testUser = userController.registerUser(user);
-        // Assert
-        assertEquals(ResponseEntity.ok(user), testUser);
-    }
+//    @Test
+//    public void testRegister() {
+//        // Arrange
+//        User user = createUser();
+//        // Act
+//        when(userService.checkIfUsernameExists(user.getUsername())).thenReturn(false);
+//        when(userService.checkIfEmailExists(user.getEmail())).thenReturn(false);
+//        when(userService.saveUserDetails(user)).thenReturn(user);
+//        ResponseEntity testUser = userController.registerUser(user);
+//        // Assert
+//        assertEquals(ResponseEntity.ok(user), testUser);
+//    }
 
     @Test
     public void testRegisterDuplicatedEmail() {

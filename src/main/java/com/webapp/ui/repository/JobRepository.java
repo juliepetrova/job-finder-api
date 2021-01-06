@@ -24,7 +24,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     @Query(value = "SELECT city FROM Job j GROUP BY j.city ORDER BY COUNT(id) DESC")
     List<String> getMostPopularCity();
 
-    @Query(value = "SELECT SUM(payment) FROM Job j WHERE status_id = 3")
+    @Query(value = "SELECT SUM(payment) FROM Job j WHERE status_id = 2")
     double totalEarnings();
 
 }

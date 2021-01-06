@@ -1,8 +1,10 @@
 package com.webapp.ui.controller;
 
+import com.webapp.ui.model.Comment;
 import com.webapp.ui.model.Job;
 import com.webapp.ui.model.Status;
 import com.webapp.ui.model.User;
+import com.webapp.ui.repository.CommentRepository;
 import com.webapp.ui.service.base.JobService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class JobController {
     @Autowired
     JobService jobService;
 
+    @Autowired
+    CommentRepository commentRepository;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getByCity(@RequestParam(required = false) String city,
@@ -106,7 +110,10 @@ public class JobController {
         jobService.deleteJob(jobId);
     }
 
-
+    @GetMapping (path = "/comments/{jobId}")
+    public List<Comment> getAllByJobId(@PathVariable int jobId){
+        return commentRepository.findByJobId(jobId);
+    }
 
 
 }

@@ -71,7 +71,7 @@ public class JobApplicationController {
 
     @GetMapping (path = "/statistics/{userId}")
         public List<JobApplication> getStatistics(@PathVariable int userId){
-        Status status = new Status(3, "Completed");
+        Status status = new Status(2, "Completed");
         return jobApplicationService.findByApplicantIdAndStatus(userId, status);
     }
 

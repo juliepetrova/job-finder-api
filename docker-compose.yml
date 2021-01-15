@@ -1,18 +1,22 @@
-version: '3'
-
+version: "3"
 services:
-  docker-mysql:
-    image: mysql:5.7
-    environment:
-      - MYSQL_DATABASE=itsboulot
-      - MYSQL_USER=root
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-    ports:
-      - 3307:3306
 
-  app:
-    image: julie/boulot-jobfinder
+  mysqldb:
+    image: juliepetrova/mysql
+    networks:
+      - boulot-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=itsboulot
+
+  boulot-jdbc-container:
+    image: juliepetrova/boulot
     ports:
-       - 8091:8080
+      - "8080:8080"
+    networks:
+      - boulot-mysql
     depends_on:
-       - docker-mysql
+      - mysqldb
+
+networks:
+  boulot-mysql:

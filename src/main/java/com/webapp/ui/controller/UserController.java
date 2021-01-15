@@ -130,6 +130,16 @@ public class UserController {
         }
     }
 
+    @GetMapping(path = "/{userId}/alljobs", produces = {MediaType.APPLICATION_JSON_VALUE})
+    public String getAllJobsByUser(@PathVariable int userId) {
+        User user = userService.findUserById(userId);
+        if (user.getJobs() != null) {
+            return Integer.toString(user.getJobs().size());
+        } else {
+            throw new NullPointerException("This user has 0 jobs.");
+        }
+    }
+
 
 
     @PutMapping
